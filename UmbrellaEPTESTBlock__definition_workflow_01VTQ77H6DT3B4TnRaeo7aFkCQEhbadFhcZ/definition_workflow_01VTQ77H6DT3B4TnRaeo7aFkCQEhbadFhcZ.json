@@ -1,0 +1,668 @@
+{
+  "workflow": {
+    "unique_name": "definition_workflow_01VTQ77H6DT3B4TnRaeo7aFkCQEhbadFhcZ",
+    "name": "Umbrella - EP-TEST Block",
+    "title": "Umbrella - EP-TEST Block",
+    "type": "generic.workflow",
+    "base_type": "workflow",
+    "variables": [
+      {
+        "schema_id": "datatype.string",
+        "properties": {
+          "value": "EP-Test Dest-Block",
+          "scope": "local",
+          "name": "Destination List Name",
+          "type": "datatype.string",
+          "description": "The name of the destination list you want records added to",
+          "is_required": false,
+          "is_invisible": false
+        },
+        "unique_name": "variable_workflow_01VTQ77HGCDCN2A8hJSqrE2cmewHpVHkDLk",
+        "object_type": "variable_workflow"
+      },
+      {
+        "schema_id": "datatype.string",
+        "properties": {
+          "value": "domain",
+          "scope": "input",
+          "name": "observable_type",
+          "type": "datatype.string",
+          "description": "The type of observable pivoted on",
+          "is_required": true,
+          "is_invisible": false
+        },
+        "unique_name": "variable_workflow_01VTQ77HGCTAP1GHRgthaIMNbnDpSRM6NN6",
+        "object_type": "variable_workflow"
+      },
+      {
+        "schema_id": "datatype.string",
+        "properties": {
+          "value": "",
+          "scope": "input",
+          "name": "observable_value",
+          "type": "datatype.string",
+          "description": "The value of the observable pivoted on",
+          "is_required": true,
+          "is_invisible": false
+        },
+        "unique_name": "variable_workflow_01VTQ77HGCL5P2t0jTkWtJ4kd8mblRZJfEJ",
+        "object_type": "variable_workflow"
+      },
+      {
+        "schema_id": "datatype.string",
+        "properties": {
+          "value": "",
+          "scope": "local",
+          "name": "TmpStr",
+          "type": "datatype.string",
+          "is_required": false,
+          "is_invisible": false
+        },
+        "unique_name": "variable_workflow_01VTR4D6DZSNQ7JPa6MLksfBUWG7DfBMKhn",
+        "object_type": "variable_workflow"
+      },
+      {
+        "schema_id": "datatype.string",
+        "properties": {
+          "value": "2642070\n",
+          "scope": "local",
+          "name": "Umbrella Organization ID",
+          "type": "datatype.string",
+          "description": "Your Umbrella organization ID. This can be found in the URL of your Umbrella dashboard. For example, in this URL the organization ID is \"1234567\": https://dashboard.umbrella.com/o/1234567/#/overview",
+          "is_required": false,
+          "is_invisible": false
+        },
+        "unique_name": "variable_workflow_01VTQ77HGC2E36mVZ6HlrEVpRYri0lDePs9",
+        "object_type": "variable_workflow"
+      }
+    ],
+    "properties": {
+      "atomic": {
+        "is_atomic": false
+      },
+      "delete_workflow_instance": false,
+      "description": "This workflow adds domain to the EP-Test destination list in Cisco Umbrella. \n",
+      "display_name": "Umbrella - EP-TEST Block",
+      "runtime_user": {
+        "target_default": true
+      },
+      "target": {
+        "target_type": "web-service.endpoint",
+        "target_id": "definition_target_01VTG9PF6I0T60o50AcC4t0JKbzFAYnUHsD",
+        "execute_on_workflow_target": true
+      }
+    },
+    "object_type": "definition_workflow",
+    "actions": [
+      {
+        "unique_name": "definition_activity_01VTQ77KFE3784C1h95nuhZAXL4ZnFzpb1L",
+        "name": "Condition Block",
+        "title": "Is the observable type supported?",
+        "type": "logic.if_else",
+        "base_type": "activity",
+        "properties": {
+          "continue_on_failure": false,
+          "display_name": "Is the observable type supported?",
+          "skip_execution": false
+        },
+        "object_type": "definition_activity",
+        "blocks": [
+          {
+            "unique_name": "definition_activity_01VTQ77LHY6I91hVpM499aDqzucueLeeVRl",
+            "name": "Condition Branch",
+            "title": "No",
+            "type": "logic.condition_block",
+            "base_type": "activity",
+            "properties": {
+              "condition": {
+                "left_operand": {
+                  "left_operand": {
+                    "left_operand": "$workflow.definition_workflow_01VTQ77H6DT3B4TnRaeo7aFkCQEhbadFhcZ.input.variable_workflow_01VTQ77HGCTAP1GHRgthaIMNbnDpSRM6NN6$",
+                    "operator": "ne",
+                    "right_operand": "ip"
+                  },
+                  "operator": "and",
+                  "right_operand": {
+                    "left_operand": "$workflow.definition_workflow_01VTQ77H6DT3B4TnRaeo7aFkCQEhbadFhcZ.input.variable_workflow_01VTQ77HGCTAP1GHRgthaIMNbnDpSRM6NN6$",
+                    "operator": "ne",
+                    "right_operand": "domain"
+                  }
+                },
+                "operator": "and",
+                "right_operand": {
+                  "left_operand": "$workflow.definition_workflow_01VTQ77H6DT3B4TnRaeo7aFkCQEhbadFhcZ.input.variable_workflow_01VTQ77HGCTAP1GHRgthaIMNbnDpSRM6NN6$",
+                  "operator": "ne",
+                  "right_operand": "url"
+                }
+              },
+              "continue_on_failure": false,
+              "display_name": "No",
+              "skip_execution": false
+            },
+            "object_type": "definition_activity",
+            "actions": [
+              {
+                "unique_name": "definition_activity_01VTQ77MQEDXC0Svu8V8HaoRkprLuWN67sO",
+                "name": "Completed",
+                "title": "Unsupported observable",
+                "type": "logic.completed",
+                "base_type": "activity",
+                "properties": {
+                  "completion_type": "failed-completed",
+                  "continue_on_failure": false,
+                  "display_name": "Unsupported observable",
+                  "result_message": "The observable type \"$workflow.definition_workflow_01VTQ77H6DT3B4TnRaeo7aFkCQEhbadFhcZ.input.variable_workflow_01VTQ77HGCTAP1GHRgthaIMNbnDpSRM6NN6$\" is not supported by this workflow",
+                  "skip_execution": false
+                },
+                "object_type": "definition_activity"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "unique_name": "definition_activity_01VUGA65EUZ9G0cJELtsyMcZ5waS26T20IO",
+        "name": "Condition Block",
+        "title": "Is URL?",
+        "type": "logic.if_else",
+        "base_type": "activity",
+        "properties": {
+          "continue_on_failure": false,
+          "display_name": "Is URL?",
+          "skip_execution": false
+        },
+        "object_type": "definition_activity",
+        "blocks": [
+          {
+            "unique_name": "definition_activity_01VUGBKS3UAHL0pFKbfogqOj3tmsjLP2c5L",
+            "name": "Condition Branch",
+            "title": "YES",
+            "type": "logic.condition_block",
+            "base_type": "activity",
+            "properties": {
+              "condition": {
+                "left_operand": {
+                  "left_operand": "$workflow.definition_workflow_01VTQ77H6DT3B4TnRaeo7aFkCQEhbadFhcZ.input.variable_workflow_01VTQ77HGCL5P2t0jTkWtJ4kd8mblRZJfEJ$",
+                  "operator": "mw",
+                  "right_operand": "https*"
+                },
+                "operator": "or",
+                "right_operand": {
+                  "left_operand": "$workflow.definition_workflow_01VTQ77H6DT3B4TnRaeo7aFkCQEhbadFhcZ.input.variable_workflow_01VTQ77HGCL5P2t0jTkWtJ4kd8mblRZJfEJ$",
+                  "operator": "mw",
+                  "right_operand": "http*"
+                }
+              },
+              "continue_on_failure": false,
+              "display_name": "YES",
+              "skip_execution": false
+            },
+            "object_type": "definition_activity",
+            "actions": [
+              {
+                "unique_name": "definition_activity_01VUGE1792FZR3aYTShhcvHRI7XjOol08IS",
+                "name": "Set Variables",
+                "title": "Set Variables",
+                "type": "core.set_multiple_variables",
+                "base_type": "activity",
+                "properties": {
+                  "continue_on_failure": false,
+                  "display_name": "Set Variables",
+                  "skip_execution": false,
+                  "variables_to_update": [
+                    {
+                      "variable_to_update": "$workflow.definition_workflow_01VTQ77H6DT3B4TnRaeo7aFkCQEhbadFhcZ.local.variable_workflow_01VTR4D6DZSNQ7JPa6MLksfBUWG7DfBMKhn$",
+                      "variable_value_new": "$workflow.definition_workflow_01VTQ77H6DT3B4TnRaeo7aFkCQEhbadFhcZ.input.variable_workflow_01VTQ77HGCL5P2t0jTkWtJ4kd8mblRZJfEJ$"
+                    }
+                  ]
+                },
+                "object_type": "definition_activity"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "unique_name": "definition_activity_01VUG9OBOHJ263sE3anKOdlXRWpgCXPe6tl",
+        "name": "Trim String",
+        "title": "Trim URL to Domain",
+        "type": "core.trim_string",
+        "base_type": "activity",
+        "properties": {
+          "characters_to_trim": "http://",
+          "continue_on_failure": true,
+          "display_name": "Trim URL to Domain",
+          "skip_execution": false,
+          "source": "$workflow.definition_workflow_01VTQ77H6DT3B4TnRaeo7aFkCQEhbadFhcZ.local.variable_workflow_01VTR4D6DZSNQ7JPa6MLksfBUWG7DfBMKhn$",
+          "trim_leading": true,
+          "trim_trailing": false
+        },
+        "object_type": "definition_activity"
+      },
+      {
+        "unique_name": "definition_activity_01VUH8W6CD6B035IG1I0lQLhuktnJbOSOuF",
+        "name": "Split String",
+        "title": "Split String",
+        "type": "core.splitstring",
+        "base_type": "activity",
+        "properties": {
+          "boundaries": [
+            {
+              "boundary": "/"
+            }
+          ],
+          "continue_on_failure": true,
+          "display_name": "Split String",
+          "input_string": "$activity.definition_activity_01VUG9OBOHJ263sE3anKOdlXRWpgCXPe6tl.output.trimmed$",
+          "skip_execution": false
+        },
+        "object_type": "definition_activity"
+      },
+      {
+        "unique_name": "definition_activity_01VTQ77OAAA0K49xxGpwtOzacsaCViF40Au",
+        "name": "Umbrella - Management - Get Destination Lists",
+        "title": "Umbrella - Management - Get Destination Lists",
+        "type": "workflow.atomic_workflow",
+        "base_type": "subworkflow",
+        "properties": {
+          "continue_on_failure": false,
+          "display_name": "Umbrella - Management - Get Destination Lists",
+          "input": {
+            "variable_workflow_01PP76E2I524R2Ds69P8MPBNOsTC97lLsjE": "$global.variable_01VTONYGZKE5V1GudaOqz9ryZNJH9bJHqKe.global.variable_01VTONYGZKE5V1GudaOqz9ryZNJH9bJHqKe$",
+            "variable_workflow_01PP76E2I57QC1YKSGlj4FvrIirJajhuiJU": 100,
+            "variable_workflow_01PP76E2I598J2s8XLXecj9Ai9616xQ7Vv3": 1
+          },
+          "runtime_user": {
+            "target_default": true
+          },
+          "skip_execution": false,
+          "target": {
+            "target_type": "web-service.endpoint",
+            "use_workflow_target": true
+          },
+          "workflow_id": "definition_workflow_01PP76E2PZZDF6jy3jVpYnYp5STVy3zReDB",
+          "workflow_name": "Umbrella - Management - Get Destination Lists"
+        },
+        "object_type": "definition_activity"
+      },
+      {
+        "unique_name": "definition_activity_01VTQ77PV3ASX1wc32azpOivm2QxhDqpg8m",
+        "name": "JSONPath Query",
+        "title": "Extract destination list ID",
+        "type": "corejava.jsonpathquery",
+        "base_type": "activity",
+        "properties": {
+          "action_timeout": 180,
+          "continue_on_failure": true,
+          "display_name": "Extract destination list ID",
+          "input_json": "$activity.definition_activity_01VTQ77OAAA0K49xxGpwtOzacsaCViF40Au.output.variable_workflow_01PP76E2I5AGW6ER9Z87Zvcb4O1pjn9Wcwc$",
+          "jsonpath_queries": [
+            {
+              "jsonpath_query": "$.data[?(@.name==\"$workflow.definition_workflow_01VTQ77H6DT3B4TnRaeo7aFkCQEhbadFhcZ.local.variable_workflow_01VTQ77HGCDCN2A8hJSqrE2cmewHpVHkDLk$\")].id",
+              "jsonpath_query_name": "destinationListId",
+              "jsonpath_query_type": "string"
+            }
+          ],
+          "skip_execution": false
+        },
+        "object_type": "definition_activity"
+      },
+      {
+        "unique_name": "definition_activity_01VTQ77R3QODC1B46n1EjOt6AsPIlthTCNQ",
+        "name": "Condition Block",
+        "title": "Was extraction successful?",
+        "type": "logic.if_else",
+        "base_type": "activity",
+        "properties": {
+          "continue_on_failure": false,
+          "display_name": "Was extraction successful?",
+          "skip_execution": false
+        },
+        "object_type": "definition_activity",
+        "blocks": [
+          {
+            "unique_name": "definition_activity_01VTQ77S2FZEV2AvbYACBPbjs9FVSg6o6Yj",
+            "name": "Condition Branch",
+            "title": "Yes",
+            "type": "logic.condition_block",
+            "base_type": "activity",
+            "properties": {
+              "condition": {
+                "left_operand": "$activity.definition_activity_01VTQ77PV3ASX1wc32azpOivm2QxhDqpg8m.output.succeeded$",
+                "operator": "eq",
+                "right_operand": true
+              },
+              "continue_on_failure": false,
+              "display_name": "Yes",
+              "skip_execution": false
+            },
+            "object_type": "definition_activity",
+            "actions": [
+              {
+                "unique_name": "definition_activity_01VUGPFZJJ27K5AUuWbvl39GGsPblQjEsrQ",
+                "name": "Condition Block",
+                "title": "Condition Block",
+                "type": "logic.if_else",
+                "base_type": "activity",
+                "properties": {
+                  "continue_on_failure": false,
+                  "display_name": "Condition Block",
+                  "skip_execution": false
+                },
+                "object_type": "definition_activity",
+                "blocks": [
+                  {
+                    "unique_name": "definition_activity_01VUGPFZYX8W92qWyPNhUc8pgG4eaGQaD9N",
+                    "name": "Condition Branch",
+                    "title": "Root Domain",
+                    "type": "logic.condition_block",
+                    "base_type": "activity",
+                    "properties": {
+                      "condition": {
+                        "left_operand": "$activity.definition_activity_01VUH8W6CD6B035IG1I0lQLhuktnJbOSOuF.output.succeeded$",
+                        "operator": "eq",
+                        "right_operand": true
+                      },
+                      "continue_on_failure": false,
+                      "display_name": "Root Domain",
+                      "skip_execution": false
+                    },
+                    "object_type": "definition_activity",
+                    "actions": [
+                      {
+                        "unique_name": "definition_activity_01VTQ77TRE4IY3ZBmFBRRISFgweYzNBDniz",
+                        "name": "Umbrella - Management - Add Record to Destination List",
+                        "title": "Umbrella - Management - Add Record to Destination List",
+                        "type": "workflow.atomic_workflow",
+                        "base_type": "subworkflow",
+                        "properties": {
+                          "continue_on_failure": false,
+                          "display_name": "Umbrella - Management - Add Record to Destination List",
+                          "input": {
+                            "variable_workflow_01PR38PRA8DAV0ueGoV9r6wwpoD7SSF757y": "Added by SecureX orchestration",
+                            "variable_workflow_01PR38PRA8HGK1pzCqHFCWKILh6nWkPrpC0": "$global.variable_01VTONYGZKE5V1GudaOqz9ryZNJH9bJHqKe.global.variable_01VTONYGZKE5V1GudaOqz9ryZNJH9bJHqKe$",
+                            "variable_workflow_01PR38PRA8ISH0QK4PJTeo7pPubN1Ft8vi7": "$activity.definition_activity_01VTQ77PV3ASX1wc32azpOivm2QxhDqpg8m.output.jsonpath_queries.destinationListId$",
+                            "variable_workflow_01PR38PRA8JXW531nZH86NP15pwRBtmRMOT": "$activity.definition_activity_01VUH8W6CD6B035IG1I0lQLhuktnJbOSOuF.output.parts[0]$"
+                          },
+                          "runtime_user": {
+                            "target_default": true
+                          },
+                          "skip_execution": false,
+                          "target": {
+                            "target_type": "web-service.endpoint",
+                            "use_workflow_target": true
+                          },
+                          "workflow_id": "definition_workflow_01PR38PRIL1R04x7je59e5UtYqDQ0B1NHet",
+                          "workflow_name": "Umbrella - Management - Add Record to Destination List"
+                        },
+                        "object_type": "definition_activity"
+                      },
+                      {
+                        "unique_name": "definition_activity_01VUJK971G8LA2kf170Xrnm4ELKUh1kMBRA",
+                        "name": "Webex Teams - Post Message to Room",
+                        "title": "Webex Teams - Post Message to Room",
+                        "type": "workflow.atomic_workflow",
+                        "base_type": "subworkflow",
+                        "properties": {
+                          "continue_on_failure": false,
+                          "display_name": "Webex Teams - Post Message to Room",
+                          "input": {
+                            "variable_workflow_01PP78DJH1TI76BYfsu9g0Tqj2S6cUxjtu5": "Y2lzY29zcGFyazovL3VzL1JPT00vM2ZlMDRhNzAtYWFlMS0xMWVjLWJhZTgtNmQwMjM4Mjg1Y2Nl",
+                            "variable_workflow_01PP78DJH1XNQ7gNQ5iZdperRHqrppzARXC": "$env.variable_01VUJS2JOAQTW0BEC41WaFCCogVh16whye0.env.variable_01VUJS2JOAQTW0BEC41WaFCCogVh16whye0$",
+                            "variable_workflow_01PP78DJH1YWL3allalGQbg1VkgKwh9GvCi": "The Domain: $activity.definition_activity_01VUH8W6CD6B035IG1I0lQLhuktnJbOSOuF.output.parts[0]$ has been added to the $workflow.definition_workflow_01VTQ77H6DT3B4TnRaeo7aFkCQEhbadFhcZ.local.variable_workflow_01VTQ77HGCDCN2A8hJSqrE2cmewHpVHkDLk$ destination List.",
+                            "variable_workflow_01PP78DJH22BB3Ej3I8tJ4OCQur0unYGjj9": "The Domain: $activity.definition_activity_01VUH8W6CD6B035IG1I0lQLhuktnJbOSOuF.output.parts[0]$ has been added to the $workflow.definition_workflow_01VTQ77H6DT3B4TnRaeo7aFkCQEhbadFhcZ.local.variable_workflow_01VTQ77HGCDCN2A8hJSqrE2cmewHpVHkDLk$ destination List.",
+                            "variable_workflow_01SVERQNMKN8N6vqX2djMtAfshphGydGsH8": ""
+                          },
+                          "runtime_user": {
+                            "target_default": true
+                          },
+                          "skip_execution": false,
+                          "target": {
+                            "override_workflow_target": true,
+                            "target_id": "definition_target_01LYUOC8X21YK74qAzy87nLRWRDyMEg3ljb",
+                            "target_type": "web-service.endpoint"
+                          },
+                          "workflow_id": "definition_workflow_01PP78DJMXS415nTjonujf03ROkr6t2PNyw",
+                          "workflow_name": "Webex Teams - Post Message to Room"
+                        },
+                        "object_type": "definition_activity"
+                      }
+                    ]
+                  },
+                  {
+                    "unique_name": "definition_activity_01VUGPG0GSWMH0z5MrMhMTpvK3jZU2NyABj",
+                    "name": "Condition Branch",
+                    "title": "Is Not Converted URL",
+                    "type": "logic.condition_block",
+                    "base_type": "activity",
+                    "properties": {
+                      "condition": {
+                        "left_operand": "$activity.definition_activity_01VUH8W6CD6B035IG1I0lQLhuktnJbOSOuF.output.succeeded$",
+                        "operator": "eq",
+                        "right_operand": false
+                      },
+                      "continue_on_failure": false,
+                      "display_name": "Is Not Converted URL",
+                      "skip_execution": false
+                    },
+                    "object_type": "definition_activity",
+                    "actions": [
+                      {
+                        "unique_name": "definition_activity_01VUGPJZTVCCE4bk8MMvqMoLkuf76ZhhcMh",
+                        "name": "Umbrella - Management - Add Record to Destination List",
+                        "title": "Umbrella - Management - Add Record to Destination List",
+                        "type": "workflow.atomic_workflow",
+                        "base_type": "subworkflow",
+                        "properties": {
+                          "continue_on_failure": false,
+                          "display_name": "Umbrella - Management - Add Record to Destination List",
+                          "input": {
+                            "variable_workflow_01PR38PRA8DAV0ueGoV9r6wwpoD7SSF757y": "Added by SecureX orchestration",
+                            "variable_workflow_01PR38PRA8HGK1pzCqHFCWKILh6nWkPrpC0": "$global.variable_01VTONYGZKE5V1GudaOqz9ryZNJH9bJHqKe.global.variable_01VTONYGZKE5V1GudaOqz9ryZNJH9bJHqKe$",
+                            "variable_workflow_01PR38PRA8ISH0QK4PJTeo7pPubN1Ft8vi7": "$activity.definition_activity_01VTQ77PV3ASX1wc32azpOivm2QxhDqpg8m.output.jsonpath_queries.destinationListId$",
+                            "variable_workflow_01PR38PRA8JXW531nZH86NP15pwRBtmRMOT": "$workflow.definition_workflow_01VTQ77H6DT3B4TnRaeo7aFkCQEhbadFhcZ.input.variable_workflow_01VTQ77HGCL5P2t0jTkWtJ4kd8mblRZJfEJ$"
+                          },
+                          "runtime_user": {
+                            "target_default": true
+                          },
+                          "skip_execution": false,
+                          "target": {
+                            "target_type": "web-service.endpoint",
+                            "use_workflow_target": true
+                          },
+                          "workflow_id": "definition_workflow_01PR38PRIL1R04x7je59e5UtYqDQ0B1NHet",
+                          "workflow_name": "Umbrella - Management - Add Record to Destination List"
+                        },
+                        "object_type": "definition_activity"
+                      },
+                      {
+                        "unique_name": "definition_activity_01VUJWFDF6N132id17SK7wBY1x18Elb0sXc",
+                        "name": "Webex Teams - Post Message to Room",
+                        "title": "Webex Teams - Post Message to Room",
+                        "type": "workflow.atomic_workflow",
+                        "base_type": "subworkflow",
+                        "properties": {
+                          "continue_on_failure": false,
+                          "display_name": "Webex Teams - Post Message to Room",
+                          "input": {
+                            "variable_workflow_01PP78DJH1TI76BYfsu9g0Tqj2S6cUxjtu5": "Y2lzY29zcGFyazovL3VzL1JPT00vM2ZlMDRhNzAtYWFlMS0xMWVjLWJhZTgtNmQwMjM4Mjg1Y2Nl",
+                            "variable_workflow_01PP78DJH1XNQ7gNQ5iZdperRHqrppzARXC": "$env.variable_01VUJS2JOAQTW0BEC41WaFCCogVh16whye0.env.variable_01VUJS2JOAQTW0BEC41WaFCCogVh16whye0$",
+                            "variable_workflow_01PP78DJH1YWL3allalGQbg1VkgKwh9GvCi": "The Domain: $workflow.definition_workflow_01VTQ77H6DT3B4TnRaeo7aFkCQEhbadFhcZ.input.variable_workflow_01VTQ77HGCL5P2t0jTkWtJ4kd8mblRZJfEJ$ has been added to the $workflow.definition_workflow_01VTQ77H6DT3B4TnRaeo7aFkCQEhbadFhcZ.local.variable_workflow_01VTQ77HGCDCN2A8hJSqrE2cmewHpVHkDLk$ destination List.",
+                            "variable_workflow_01PP78DJH22BB3Ej3I8tJ4OCQur0unYGjj9": "The Domain: $workflow.definition_workflow_01VTQ77H6DT3B4TnRaeo7aFkCQEhbadFhcZ.input.variable_workflow_01VTQ77HGCL5P2t0jTkWtJ4kd8mblRZJfEJ$ has been added to the $workflow.definition_workflow_01VTQ77H6DT3B4TnRaeo7aFkCQEhbadFhcZ.local.variable_workflow_01VTQ77HGCDCN2A8hJSqrE2cmewHpVHkDLk$ destination List.",
+                            "variable_workflow_01SVERQNMKN8N6vqX2djMtAfshphGydGsH8": ""
+                          },
+                          "runtime_user": {
+                            "target_default": true
+                          },
+                          "skip_execution": false,
+                          "target": {
+                            "override_workflow_target": true,
+                            "target_id": "definition_target_01LYUOC8X21YK74qAzy87nLRWRDyMEg3ljb",
+                            "target_type": "web-service.endpoint"
+                          },
+                          "workflow_id": "definition_workflow_01PP78DJMXS415nTjonujf03ROkr6t2PNyw",
+                          "workflow_name": "Webex Teams - Post Message to Room"
+                        },
+                        "object_type": "definition_activity"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "unique_name": "definition_activity_01VTQ77UZKY3V0uuNXcni6YNRKxNSE7pDco",
+            "name": "Condition Branch",
+            "title": "No",
+            "type": "logic.condition_block",
+            "base_type": "activity",
+            "properties": {
+              "condition": {
+                "left_operand": "$activity.definition_activity_01VTQ77PV3ASX1wc32azpOivm2QxhDqpg8m.output.succeeded$",
+                "operator": "eq",
+                "right_operand": false
+              },
+              "continue_on_failure": false,
+              "display_name": "No",
+              "skip_execution": false
+            },
+            "object_type": "definition_activity",
+            "actions": [
+              {
+                "unique_name": "definition_activity_01VTQ77W9W9KQ4Ozq3GvwnkuEE1Q46QtKpS",
+                "name": "Completed",
+                "title": "Failed",
+                "type": "logic.completed",
+                "base_type": "activity",
+                "properties": {
+                  "completion_type": "failed-completed",
+                  "continue_on_failure": false,
+                  "display_name": "Failed",
+                  "result_message": "Failed to extract the destination list ID for the list \"$workflow.definition_workflow_01VTQ77H6DT3B4TnRaeo7aFkCQEhbadFhcZ.local.variable_workflow_01VTQ77HGCDCN2A8hJSqrE2cmewHpVHkDLk$\"",
+                  "skip_execution": false
+                },
+                "object_type": "definition_activity"
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "categories": [
+      "category_01EI33LMFFL7N5eTQLsOOJIrxdlSOHb7r3r",
+      "category_01FM7CGPZZCMY0KcvgiGjVH5UaB4y4aDJ7m"
+    ]
+  },
+  "categories": {
+    "category_01EI33LMFFL7N5eTQLsOOJIrxdlSOHb7r3r": {
+      "unique_name": "category_01EI33LMFFL7N5eTQLsOOJIrxdlSOHb7r3r",
+      "name": "SecureX",
+      "title": "SecureX",
+      "type": "basic.category",
+      "base_type": "category",
+      "category_type": "custom",
+      "object_type": "category"
+    },
+    "category_01FM7CGPZZCMY0KcvgiGjVH5UaB4y4aDJ7m": {
+      "unique_name": "category_01FM7CGPZZCMY0KcvgiGjVH5UaB4y4aDJ7m",
+      "name": "response",
+      "title": "response",
+      "type": "basic.category",
+      "base_type": "category",
+      "category_type": "custom",
+      "object_type": "category"
+    }
+  },
+  "targets": {
+    "definition_target_01LYUOC8X21YK74qAzy87nLRWRDyMEg3ljb": {
+      "unique_name": "definition_target_01LYUOC8X21YK74qAzy87nLRWRDyMEg3ljb",
+      "name": "Webex Teams",
+      "title": "Webex Teams",
+      "type": "web-service.endpoint",
+      "base_type": "target",
+      "object_type": "definition_target",
+      "properties": {
+        "description": "Webex Teams",
+        "disable_certificate_validation": false,
+        "display_name": "Webex Teams",
+        "host": "webexapis.com",
+        "no_runtime_user": true,
+        "port": 443,
+        "protocol": "https"
+      }
+    },
+    "definition_target_01VTG9PF6I0T60o50AcC4t0JKbzFAYnUHsD": {
+      "unique_name": "definition_target_01VTG9PF6I0T60o50AcC4t0JKbzFAYnUHsD",
+      "name": "Umbrella Management",
+      "title": "Umbrella Management",
+      "type": "web-service.endpoint",
+      "base_type": "target",
+      "object_type": "definition_target",
+      "properties": {
+        "default_runtime_user_id": "definition_runtime_user_01VTG978Y15NS19Nx0pKX6qq7Jo2XOPqMhK",
+        "disable_certificate_validation": false,
+        "display_name": "Umbrella Management",
+        "host": "management.api.umbrella.com",
+        "ignore_proxy": true,
+        "no_runtime_user": false,
+        "port": 443,
+        "protocol": "https"
+      }
+    }
+  },
+  "runtime_users": {
+    "definition_runtime_user_01VTG978Y15NS19Nx0pKX6qq7Jo2XOPqMhK": {
+      "unique_name": "definition_runtime_user_01VTG978Y15NS19Nx0pKX6qq7Jo2XOPqMhK",
+      "name": "Umbrella Management",
+      "title": "Umbrella Management",
+      "type": "runtime_user.web-service_basic_credentials",
+      "base_type": "runtime_user",
+      "object_type": "definition_runtime_user",
+      "properties": {
+        "auth_option": "*****",
+        "basic_password": "*****",
+        "basic_username": "*****",
+        "description": "From Umbrella API keys \n\nUsername: Client ID\nPassword: Client Secret",
+        "display_name": "Umbrella Management"
+      }
+    }
+  },
+  "variables": {
+    "variable_01VTONYGZKE5V1GudaOqz9ryZNJH9bJHqKe": {
+      "unique_name": "variable_01VTONYGZKE5V1GudaOqz9ryZNJH9bJHqKe",
+      "properties": {
+        "value": "2642070",
+        "scope": "global",
+        "name": "CDNET-UmbrellaOrg",
+        "type": "datatype.string",
+        "description": "Umbrella Org ID for My Lab",
+        "is_required": false,
+        "is_invisible": false
+      },
+      "object_type": "variable"
+    },
+    "variable_01VUJS2JOAQTW0BEC41WaFCCogVh16whye0": {
+      "unique_name": "variable_01VUJS2JOAQTW0BEC41WaFCCogVh16whye0",
+      "properties": {
+        "value": "*****",
+        "scope": "env",
+        "name": "SecureX-UmbBlock-Bot Access Token",
+        "type": "datatype.secure_string",
+        "is_required": false,
+        "is_invisible": false
+      },
+      "object_type": "variable"
+    }
+  },
+  "atomic_workflows": [
+    "definition_workflow_01PR38PRIL1R04x7je59e5UtYqDQ0B1NHet",
+    "definition_workflow_01PP76E2PZZDF6jy3jVpYnYp5STVy3zReDB",
+    "definition_workflow_01PP78DJMXS415nTjonujf03ROkr6t2PNyw"
+  ],
+  "dependent_workflows": [
+    "definition_workflow_01PP76E2PZZDF6jy3jVpYnYp5STVy3zReDB",
+    "definition_workflow_01PR38PRIL1R04x7je59e5UtYqDQ0B1NHet",
+    "definition_workflow_01PP78DJMXS415nTjonujf03ROkr6t2PNyw"
+  ]
+}
