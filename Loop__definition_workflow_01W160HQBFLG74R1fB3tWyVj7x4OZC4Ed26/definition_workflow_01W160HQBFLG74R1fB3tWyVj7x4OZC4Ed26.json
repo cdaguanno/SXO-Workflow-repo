@@ -1,0 +1,133 @@
+{
+  "workflow": {
+    "unique_name": "definition_workflow_01W160HQBFLG74R1fB3tWyVj7x4OZC4Ed26",
+    "name": "Loop",
+    "title": "Loop",
+    "type": "generic.workflow",
+    "base_type": "workflow",
+    "variables": [
+      {
+        "schema_id": "datatype.integer",
+        "properties": {
+          "value": 0,
+          "scope": "local",
+          "name": "cnt",
+          "type": "datatype.integer",
+          "is_required": false,
+          "is_invisible": false
+        },
+        "unique_name": "variable_workflow_01W161IIEG8HC6JgHOJb1yMEtqQvEimBZVW",
+        "object_type": "variable_workflow"
+      },
+      {
+        "schema_id": "datatype.integer",
+        "properties": {
+          "value": 0,
+          "scope": "local",
+          "name": "Cnt2",
+          "type": "datatype.integer",
+          "is_required": false,
+          "is_invisible": false
+        },
+        "unique_name": "variable_workflow_01W163EA3R7QK1nw7g8vYMm7TafQiQ4OSc5",
+        "object_type": "variable_workflow"
+      }
+    ],
+    "properties": {
+      "atomic": {
+        "is_atomic": false
+      },
+      "delete_workflow_instance": false,
+      "display_name": "Loop",
+      "runtime_user": {
+        "target_default": true
+      },
+      "target": {
+        "no_target": true
+      }
+    },
+    "object_type": "definition_workflow",
+    "actions": [
+      {
+        "unique_name": "definition_activity_01W168ZOWF2LU0SPhtVTbGw5pNKprPTxPKT",
+        "name": "Set Variables",
+        "title": "Set Variables",
+        "type": "core.set_multiple_variables",
+        "base_type": "activity",
+        "properties": {
+          "continue_on_failure": false,
+          "display_name": "Set Variables",
+          "skip_execution": true,
+          "variables_to_update": [
+            {
+              "variable_to_update": "$workflow.definition_workflow_01W160HQBFLG74R1fB3tWyVj7x4OZC4Ed26.local.variable_workflow_01W161IIEG8HC6JgHOJb1yMEtqQvEimBZVW$",
+              "variable_value_new": 0
+            }
+          ]
+        },
+        "object_type": "definition_activity"
+      },
+      {
+        "unique_name": "definition_activity_01W16166QDD0W1nBZtm4WPzWdsnxgDhGMI2",
+        "name": "While Loop",
+        "title": "While Loop",
+        "type": "logic.while",
+        "base_type": "activity",
+        "properties": {
+          "continue_on_failure": false,
+          "display_name": "While Loop",
+          "skip_execution": false
+        },
+        "object_type": "definition_activity",
+        "blocks": [
+          {
+            "unique_name": "definition_activity_01W161677KZXI1aaeXY8ajw1gGHa7PlIkal",
+            "name": "Condition Branch",
+            "title": "Condition Branch",
+            "type": "logic.condition_block",
+            "base_type": "activity",
+            "properties": {
+              "condition": {
+                "left_operand": "$workflow.definition_workflow_01W160HQBFLG74R1fB3tWyVj7x4OZC4Ed26.local.variable_workflow_01W161IIEG8HC6JgHOJb1yMEtqQvEimBZVW$",
+                "operator": "ne",
+                "right_operand": 5
+              },
+              "continue_on_failure": false,
+              "display_name": "Condition Branch",
+              "skip_execution": false
+            },
+            "object_type": "definition_activity",
+            "actions": [
+              {
+                "unique_name": "definition_activity_01W161LWU6TYK2tbHRDaKaCuB0Da8M7WLuu",
+                "name": "Set Variables",
+                "title": "Set Variables",
+                "type": "core.set_multiple_variables",
+                "base_type": "activity",
+                "properties": {
+                  "continue_on_failure": false,
+                  "display_name": "Set Variables",
+                  "skip_execution": false,
+                  "variables_to_update": [
+                    {
+                      "variable_to_update": "$workflow.definition_workflow_01W160HQBFLG74R1fB3tWyVj7x4OZC4Ed26.local.variable_workflow_01W163EA3R7QK1nw7g8vYMm7TafQiQ4OSc5$",
+                      "variable_value_new": "$workflow.definition_workflow_01W160HQBFLG74R1fB3tWyVj7x4OZC4Ed26.local.variable_workflow_01W161IIEG8HC6JgHOJb1yMEtqQvEimBZVW$ +1"
+                    },
+                    {
+                      "variable_to_update": "$workflow.definition_workflow_01W160HQBFLG74R1fB3tWyVj7x4OZC4Ed26.local.variable_workflow_01W161IIEG8HC6JgHOJb1yMEtqQvEimBZVW$",
+                      "variable_value_new": "$workflow.definition_workflow_01W160HQBFLG74R1fB3tWyVj7x4OZC4Ed26.local.variable_workflow_01W161IIEG8HC6JgHOJb1yMEtqQvEimBZVW$+1"
+                    }
+                  ]
+                },
+                "object_type": "definition_activity"
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "categories": [
+      "category_1BMfMXSnJMyt5Ihqi7rWJr5N8cf"
+    ]
+  }
+}
