@@ -275,31 +275,16 @@
         "base_type": "workflow",
         "variables": [
           {
-            "schema_id": "datatype.integer",
-            "properties": {
-              "value": 0,
-              "scope": "local",
-              "name": "NumOfElem",
-              "type": "datatype.integer",
-              "description": "number of elements counted by for Each loop from spliting input string to atomic by the delimiter defined by the delimiter input variable",
-              "is_required": false,
-              "is_invisible": false
-            },
-            "unique_name": "variable_workflow_01W7979MJ6I8I1G5QHNl1CcIlsQ6TVKqbUP",
-            "object_type": "variable_workflow"
-          },
-          {
             "schema_id": "datatype.string",
             "properties": {
               "value": "",
               "scope": "local",
-              "name": "Original_Delimited-data",
+              "name": "TmpStr",
               "type": "datatype.string",
-              "description": "This is the string of data delimited by a defind delimiter",
               "is_required": false,
               "is_invisible": false
             },
-            "unique_name": "variable_workflow_01W77N15HDDJZ701Zo7we3WnUMVlHtxYs49",
+            "unique_name": "variable_workflow_01W79B4Q16RJF0pm2k0kOWy8gNIIMxodDgq",
             "object_type": "variable_workflow"
           },
           {
@@ -314,46 +299,6 @@
               "is_invisible": false
             },
             "unique_name": "variable_workflow_01W7WRK1I6SKX48BytKV6XNX1kIHgbP4TUG",
-            "object_type": "variable_workflow"
-          },
-          {
-            "schema_id": "datatype.string",
-            "properties": {
-              "value": "",
-              "scope": "local",
-              "name": "CsvDataRow",
-              "type": "datatype.string",
-              "description": "This variable holds the data after if was converted into rows and converted into CSV",
-              "is_required": false,
-              "is_invisible": false
-            },
-            "unique_name": "variable_workflow_01W77OSKABDZ16oMLzgkChiQ5aZP8BcoHgQ",
-            "object_type": "variable_workflow"
-          },
-          {
-            "schema_id": "datatype.string",
-            "properties": {
-              "value": "",
-              "scope": "local",
-              "name": "TmpStr",
-              "type": "datatype.string",
-              "is_required": false,
-              "is_invisible": false
-            },
-            "unique_name": "variable_workflow_01W79B4Q16RJF0pm2k0kOWy8gNIIMxodDgq",
-            "object_type": "variable_workflow"
-          },
-          {
-            "schema_id": "datatype.integer",
-            "properties": {
-              "value": 0,
-              "scope": "local",
-              "name": "cntr",
-              "type": "datatype.integer",
-              "is_required": false,
-              "is_invisible": false
-            },
-            "unique_name": "variable_workflow_01W7995DCM3VT1JiNVeNhxYUqHUmU7XqKFk",
             "object_type": "variable_workflow"
           },
           {
@@ -384,6 +329,34 @@
             "object_type": "variable_workflow"
           },
           {
+            "schema_id": "datatype.string",
+            "properties": {
+              "value": "",
+              "scope": "local",
+              "name": "CsvDataRow",
+              "type": "datatype.string",
+              "description": "This variable holds the data after if was converted into rows and converted into CSV",
+              "is_required": false,
+              "is_invisible": false
+            },
+            "unique_name": "variable_workflow_01W77OSKABDZ16oMLzgkChiQ5aZP8BcoHgQ",
+            "object_type": "variable_workflow"
+          },
+          {
+            "schema_id": "datatype.integer",
+            "properties": {
+              "value": 0,
+              "scope": "local",
+              "name": "NumOfElem",
+              "type": "datatype.integer",
+              "description": "number of elements counted by for Each loop from spliting input string to atomic by the delimiter defined by the delimiter input variable",
+              "is_required": false,
+              "is_invisible": false
+            },
+            "unique_name": "variable_workflow_01W7979MJ6I8I1G5QHNl1CcIlsQ6TVKqbUP",
+            "object_type": "variable_workflow"
+          },
+          {
             "schema_id": "datatype.integer",
             "properties": {
               "value": 7,
@@ -395,6 +368,33 @@
               "is_invisible": false
             },
             "unique_name": "variable_workflow_01W79IRI907VC7UtTnrHa8U3JJJWMk7pSDR",
+            "object_type": "variable_workflow"
+          },
+          {
+            "schema_id": "datatype.string",
+            "properties": {
+              "value": "",
+              "scope": "local",
+              "name": "Original_Delimited-data",
+              "type": "datatype.string",
+              "description": "This is the string of data delimited by a defind delimiter",
+              "is_required": false,
+              "is_invisible": false
+            },
+            "unique_name": "variable_workflow_01W77N15HDDJZ701Zo7we3WnUMVlHtxYs49",
+            "object_type": "variable_workflow"
+          },
+          {
+            "schema_id": "datatype.integer",
+            "properties": {
+              "value": 0,
+              "scope": "local",
+              "name": "cntr",
+              "type": "datatype.integer",
+              "is_required": false,
+              "is_invisible": false
+            },
+            "unique_name": "variable_workflow_01W7995DCM3VT1JiNVeNhxYUqHUmU7XqKFk",
             "object_type": "variable_workflow"
           },
           {
@@ -1242,6 +1242,19 @@
           {
             "schema_id": "datatype.string",
             "properties": {
+              "value": "| Process Name | Process ID | CMD Line | Local Address | Local Port | Remote Address | Remote Port |\n|---------------|-------------|-------------|-------------|-------------|-------------|-------------|",
+              "scope": "local",
+              "name": "DiscText",
+              "type": "datatype.string",
+              "is_required": false,
+              "is_invisible": false
+            },
+            "unique_name": "variable_workflow_01W8H9I4VGSF42ijyQ6A3lIHXYR6IoPe3KP",
+            "object_type": "variable_workflow"
+          },
+          {
+            "schema_id": "datatype.string",
+            "properties": {
               "value": "",
               "scope": "local",
               "name": "RowStr",
@@ -1250,6 +1263,19 @@
               "is_invisible": false
             },
             "unique_name": "variable_workflow_01W8HL8XJ62FW1qfJUaqsY6jhdniE1l0fja",
+            "object_type": "variable_workflow"
+          },
+          {
+            "schema_id": "datatype.string",
+            "properties": {
+              "value": "",
+              "scope": "input",
+              "name": "Incident Title",
+              "type": "datatype.string",
+              "is_required": true,
+              "is_invisible": false
+            },
+            "unique_name": "variable_workflow_01W8STK6VP8H4314OOxUcSFi5NX9QksnPMT",
             "object_type": "variable_workflow"
           },
           {
@@ -1268,19 +1294,6 @@
           {
             "schema_id": "datatype.string",
             "properties": {
-              "value": "| Process Name | Process ID | CMD Line | Local Address | Local Port | Remote Address | Remote Port |\n|---------------|-------------|-------------|-------------|-------------|-------------|-------------|",
-              "scope": "local",
-              "name": "DiscText",
-              "type": "datatype.string",
-              "is_required": false,
-              "is_invisible": false
-            },
-            "unique_name": "variable_workflow_01W8H9I4VGSF42ijyQ6A3lIHXYR6IoPe3KP",
-            "object_type": "variable_workflow"
-          },
-          {
-            "schema_id": "datatype.string",
-            "properties": {
               "value": "",
               "scope": "local",
               "name": "CmdLine",
@@ -1289,19 +1302,6 @@
               "is_invisible": false
             },
             "unique_name": "variable_workflow_01W8HEOSK612549kQ22FmXTbgPjrHW7Ew4P",
-            "object_type": "variable_workflow"
-          },
-          {
-            "schema_id": "datatype.string",
-            "properties": {
-              "value": "",
-              "scope": "input",
-              "name": "Incident Title",
-              "type": "datatype.string",
-              "is_required": true,
-              "is_invisible": false
-            },
-            "unique_name": "variable_workflow_01W8STK6VP8H4314OOxUcSFi5NX9QksnPMT",
             "object_type": "variable_workflow"
           }
         ],
@@ -1563,11 +1563,11 @@
     }
   ],
   "atomic_workflows": [
-    "definition_workflow_01PP75S3LTBW4420OZU3rdHWKHFnE6aC7yH",
-    "definition_workflow_01PP773PI1X3Y1YQWhirIL8Uy40Thd6ND7r",
-    "definition_workflow_01PQ89Y7GHRYN1Po7FXaw3jvoMHv5VaAlG1",
     "definition_workflow_01W5HREC9M5MK3gmSXw0jlhd9uzlZcHChnj",
-    "definition_workflow_01W1YG1BVL0NL1OnuOy2Sy6VDYjWOIv5ChZ"
+    "definition_workflow_01W1YG1BVL0NL1OnuOy2Sy6VDYjWOIv5ChZ",
+    "definition_workflow_01PQ89Y7GHRYN1Po7FXaw3jvoMHv5VaAlG1",
+    "definition_workflow_01PP75S3LTBW4420OZU3rdHWKHFnE6aC7yH",
+    "definition_workflow_01PP773PI1X3Y1YQWhirIL8Uy40Thd6ND7r"
   ],
   "dependent_workflows": [
     "definition_workflow_01W1YG1BVL0NL1OnuOy2Sy6VDYjWOIv5ChZ",
