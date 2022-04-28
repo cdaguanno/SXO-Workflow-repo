@@ -39,12 +39,12 @@
       {
         "unique_name": "definition_activity_01WJ0AP3BN82U0gPR5paiVLXLSk4b705SEl",
         "name": "Set Variables",
-        "title": "Set Variables",
+        "title": "Set Variable to true via Webhook Trigger",
         "type": "core.set_multiple_variables",
         "base_type": "activity",
         "properties": {
           "continue_on_failure": false,
-          "display_name": "Set Variables",
+          "display_name": "Set Variable to true via Webhook Trigger",
           "skip_execution": false,
           "variables_to_update": [
             {
