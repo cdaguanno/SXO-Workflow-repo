@@ -1,0 +1,110 @@
+{
+  "workflow": {
+    "unique_name": "definition_workflow_01WP6EE2NPOFZ75yfSkGLjVf7oS3WkYlSb3",
+    "name": "Webhook Test",
+    "title": "Webhook Test",
+    "type": "generic.workflow",
+    "base_type": "workflow",
+    "variables": [
+      {
+        "schema_id": "datatype.boolean",
+        "properties": {
+          "value": false,
+          "scope": "local",
+          "name": "triggered?",
+          "type": "datatype.boolean",
+          "is_required": false,
+          "is_invisible": false
+        },
+        "unique_name": "variable_workflow_01WP6EE39DYDR2KnmMl7kQ9Cwc1BCR79MFQ",
+        "object_type": "variable_workflow"
+      }
+    ],
+    "properties": {
+      "atomic": {
+        "is_atomic": false
+      },
+      "delete_workflow_instance": false,
+      "description": "Version 1 = First Committed Code",
+      "display_name": "Webhook Test",
+      "runtime_user": {
+        "target_default": true
+      },
+      "target": {
+        "no_target": true
+      }
+    },
+    "object_type": "definition_workflow",
+    "actions": [
+      {
+        "unique_name": "definition_activity_01WP6EEFBF6HL7YJjQTW1vESNYZLZoK5yzy",
+        "name": "Set Variables",
+        "title": "Set Variable to true via Webhook Trigger",
+        "type": "core.set_multiple_variables",
+        "base_type": "activity",
+        "properties": {
+          "continue_on_failure": false,
+          "display_name": "Set Variable to true via Webhook Trigger",
+          "skip_execution": false,
+          "variables_to_update": [
+            {
+              "variable_to_update": "$workflow.definition_workflow_01WP6EE2NPOFZ75yfSkGLjVf7oS3WkYlSb3.local.variable_workflow_01WP6EE39DYDR2KnmMl7kQ9Cwc1BCR79MFQ$",
+              "variable_value_new": true
+            }
+          ]
+        },
+        "object_type": "definition_activity"
+      }
+    ],
+    "categories": [
+      "category_1BMfMXSnJMyt5Ihqi7rWJr5N8cf"
+    ]
+  },
+  "triggers": {
+    "triggerevent_01WP6EECBPTHA2mGevQcQhgz2fpaLKgAO54": {
+      "workflow_id": "definition_workflow_01WP6EE2NPOFZ75yfSkGLjVf7oS3WkYlSb3",
+      "name": "Approval",
+      "title": "",
+      "lowercase_name": "event.approval",
+      "type": "event",
+      "base_type": "trigger",
+      "ref_id": "event_webhook_01WJ0BJL8HSV04GRUiC5tuW37l7tIFbgy7E",
+      "version": "1.0.0",
+      "disabled": false,
+      "unique_name": "triggerevent_01WP6EECBPTHA2mGevQcQhgz2fpaLKgAO54",
+      "object_type": "triggerevent"
+    }
+  },
+  "events": {
+    "event_webhook_01WJ0BJL8HSV04GRUiC5tuW37l7tIFbgy7E": {
+      "name": "Approved",
+      "title": "Approved",
+      "type": "webhook.event",
+      "base_type": "event",
+      "object_type": "event_webhook",
+      "target_id": "",
+      "webhook_id": "webhook_01WJ02N05Z9Y574hM4Nj4HrPnsMK3OmgNlQ",
+      "version": "1.0.0",
+      "properties": {
+        "title": "Approved",
+        "webhook_id": "webhook_01WJ02N05Z9Y574hM4Nj4HrPnsMK3OmgNlQ"
+      },
+      "unique_name": "event_webhook_01WJ0BJL8HSV04GRUiC5tuW37l7tIFbgy7E"
+    }
+  },
+  "webhooks": {
+    "webhook_01WJ02N05Z9Y574hM4Nj4HrPnsMK3OmgNlQ": {
+      "name": "Task Approval",
+      "title": "Task Approval",
+      "type": "generic.webhook",
+      "base_type": "webhook",
+      "object_type": "webhook",
+      "version": "1.0.0",
+      "properties": {
+        "display_name": "Task Approval",
+        "request_content_type": "application/json"
+      },
+      "unique_name": "webhook_01WJ02N05Z9Y574hM4Nj4HrPnsMK3OmgNlQ"
+    }
+  }
+}
