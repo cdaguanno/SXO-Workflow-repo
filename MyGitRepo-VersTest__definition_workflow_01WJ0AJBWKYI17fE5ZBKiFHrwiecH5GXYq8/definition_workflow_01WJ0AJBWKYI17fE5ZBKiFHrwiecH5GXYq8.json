@@ -54,11 +54,74 @@
           ]
         },
         "object_type": "definition_activity"
+      },
+      {
+        "unique_name": "definition_activity_01XIYLB6P9UBU1DYR0W6kDguAKE1XjVR1PS",
+        "name": "Condition Block",
+        "title": "Condition Block",
+        "type": "logic.if_else",
+        "base_type": "activity",
+        "properties": {
+          "continue_on_failure": false,
+          "display_name": "Condition Block",
+          "skip_execution": false
+        },
+        "object_type": "definition_activity",
+        "blocks": [
+          {
+            "unique_name": "definition_activity_01XIYLB7EOY217XgkBwAZ3GG9TeU1PoDeDE",
+            "name": "Condition Branch",
+            "title": "Condition Branch",
+            "type": "logic.condition_block",
+            "base_type": "activity",
+            "properties": {
+              "condition": {
+                "left_operand": "$workflow.definition_workflow_01WJ0AJBWKYI17fE5ZBKiFHrwiecH5GXYq8.local.variable_workflow_01WJ0B2BNIGLR4M0Sy09wt6NrIthRh6wjZA$",
+                "operator": "eq",
+                "right_operand": true
+              },
+              "continue_on_failure": false,
+              "display_name": "Condition Branch",
+              "skip_execution": false
+            },
+            "object_type": "definition_activity"
+          },
+          {
+            "unique_name": "definition_activity_01XIYLB85KIG4565doNgCE79iBqDwq1h75U",
+            "name": "Condition Branch",
+            "title": "Condition Branch",
+            "type": "logic.condition_block",
+            "base_type": "activity",
+            "properties": {
+              "condition": {
+                "left_operand": "$workflow.definition_workflow_01WJ0AJBWKYI17fE5ZBKiFHrwiecH5GXYq8.local.variable_workflow_01WJ0B2BNIGLR4M0Sy09wt6NrIthRh6wjZA$",
+                "operator": "ne",
+                "right_operand": true
+              },
+              "continue_on_failure": false,
+              "display_name": "Condition Branch",
+              "skip_execution": false
+            },
+            "object_type": "definition_activity"
+          }
+        ]
       }
     ],
     "categories": [
-      "category_1BMfMXSnJMyt5Ihqi7rWJr5N8cf"
+      "category_01WP6YAYOOCYY2blEw8gau2OC5W62Gt5ceq"
     ]
+  },
+  "categories": {
+    "category_01WP6YAYOOCYY2blEw8gau2OC5W62Gt5ceq": {
+      "unique_name": "category_01WP6YAYOOCYY2blEw8gau2OC5W62Gt5ceq",
+      "name": "Sample Workflows",
+      "title": "Sample Workflows",
+      "type": "basic.category",
+      "base_type": "category",
+      "description": "Samples of tested functionsa and workflows",
+      "category_type": "custom",
+      "object_type": "category"
+    }
   },
   "triggers": {
     "triggerevent_01WJ0BNJIV41K5HtoXOObViL2Q0WaV1Lf1d": {
