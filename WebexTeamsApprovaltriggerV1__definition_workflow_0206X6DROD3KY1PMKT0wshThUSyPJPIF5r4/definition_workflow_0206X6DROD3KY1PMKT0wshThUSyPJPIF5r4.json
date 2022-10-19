@@ -1,0 +1,2313 @@
+{
+  "workflow": {
+    "unique_name": "definition_workflow_0206X6DROD3KY1PMKT0wshThUSyPJPIF5r4",
+    "name": "Webex Teams - Task Approval Trigger",
+    "title": "Webex Teams - Task Approval Trigger",
+    "type": "generic.workflow",
+    "base_type": "workflow",
+    "variables": [
+      {
+        "schema_id": "datatype.string",
+        "properties": {
+          "value": "",
+          "scope": "local",
+          "name": "Attachment_Action",
+          "type": "datatype.string",
+          "is_required": false,
+          "is_invisible": false
+        },
+        "unique_name": "variable_workflow_020CSJ7MGPNY91Sc4YjvotCoVcU3iBfKlA9",
+        "object_type": "variable_workflow"
+      },
+      {
+        "schema_id": "datatype.string",
+        "properties": {
+          "value": "",
+          "scope": "local",
+          "name": "Card-Webhook-Response",
+          "type": "datatype.string",
+          "is_required": false,
+          "is_invisible": false
+        },
+        "unique_name": "variable_workflow_020BCZQJ821QD21tdhk4fghPTKyguHcJTCs",
+        "object_type": "variable_workflow"
+      },
+      {
+        "schema_id": "datatype.boolean",
+        "properties": {
+          "value": false,
+          "scope": "output",
+          "name": "Approved",
+          "type": "datatype.boolean",
+          "is_required": false,
+          "is_invisible": false
+        },
+        "unique_name": "variable_workflow_020CTNNE6CBGC3q9GGzzA7PwSmShyFH2nXF",
+        "object_type": "variable_workflow"
+      },
+      {
+        "schema_id": "datatype.integer",
+        "properties": {
+          "value": 0,
+          "scope": "local",
+          "name": "TargetRowIndex",
+          "type": "datatype.integer",
+          "is_required": false,
+          "is_invisible": false
+        },
+        "unique_name": "variable_workflow_020J7ZP42ZOJF05SsKHMhM0iSwrNpOybpKo",
+        "object_type": "variable_workflow"
+      },
+      {
+        "schema_id": "datatype.string",
+        "properties": {
+          "value": "",
+          "scope": "local",
+          "name": "Response_To_User",
+          "type": "datatype.string",
+          "description": "Variable to determine the response to the user based on the user interaction with the card",
+          "is_required": false,
+          "is_invisible": false
+        },
+        "unique_name": "variable_workflow_020T1COAJ6YEY1edlA60BDs7tkG4I4uRHYg",
+        "object_type": "variable_workflow"
+      }
+    ],
+    "properties": {
+      "atomic": {
+        "is_atomic": false
+      },
+      "delete_workflow_instance": false,
+      "description": "Webhook trigger - Waiting for approval task in teams room to be executed. ",
+      "display_name": "Webex Teams - Task Approval Trigger",
+      "runtime_user": {
+        "target_default": true
+      },
+      "target": {
+        "no_target": true
+      }
+    },
+    "object_type": "definition_workflow",
+    "actions": [
+      {
+        "unique_name": "definition_activity_020BXUDIG2M7B2Y3NGXPSsEYywJNSVRMf9N",
+        "name": "Set Variables",
+        "title": "Set Card Response",
+        "type": "core.set_multiple_variables",
+        "base_type": "activity",
+        "properties": {
+          "continue_on_failure": true,
+          "description": "Variable set from Raw JSON response from Webhook",
+          "display_name": "Set Card Response",
+          "skip_execution": false,
+          "variables_to_update": [
+            {
+              "variable_to_update": "$workflow.definition_workflow_0206X6DROD3KY1PMKT0wshThUSyPJPIF5r4.local.variable_workflow_020BCZQJ821QD21tdhk4fghPTKyguHcJTCs$",
+              "variable_value_new": "$trigger.triggerevent_020BYJZDOZZKV6vWNt4bqQhz3FhuHprkl9t.output.request_body$"
+            }
+          ]
+        },
+        "object_type": "definition_activity"
+      },
+      {
+        "unique_name": "definition_activity_020CSI8RR8TXL64EkRB0n3d7zJpjoEE4GKh",
+        "name": "JSONPath Query",
+        "title": "Query Message IDs",
+        "type": "corejava.jsonpathquery",
+        "base_type": "activity",
+        "properties": {
+          "action_timeout": 180,
+          "continue_on_failure": false,
+          "display_name": "Query Message IDs",
+          "input_json": "$workflow.definition_workflow_0206X6DROD3KY1PMKT0wshThUSyPJPIF5r4.local.variable_workflow_020BCZQJ821QD21tdhk4fghPTKyguHcJTCs$",
+          "jsonpath_queries": [
+            {
+              "jsonpath_query": "$.data.id",
+              "jsonpath_query_name": "AttachmentID",
+              "jsonpath_query_type": "string"
+            },
+            {
+              "jsonpath_query": "$.data.messageId",
+              "jsonpath_query_name": "MessageID",
+              "jsonpath_query_type": "string"
+            },
+            {
+              "jsonpath_query": "$.data.roomId",
+              "jsonpath_query_name": "RoomID",
+              "jsonpath_query_type": "string"
+            }
+          ],
+          "skip_execution": false
+        },
+        "object_type": "definition_activity"
+      },
+      {
+        "unique_name": "definition_activity_020RP4PTGKEKG7DAqo5D9gVtxyiBAbehATe",
+        "name": "Group",
+        "title": "GRP - Search Aproval Action Table",
+        "type": "logic.group",
+        "base_type": "activity",
+        "properties": {
+          "continue_on_failure": false,
+          "description": "Tabel fuctions to find the row associated with the actoin performed by the appropriate request and approval card",
+          "display_name": "GRP - Search Aproval Action Table",
+          "skip_execution": false
+        },
+        "object_type": "definition_activity",
+        "actions": [
+          {
+            "unique_name": "definition_activity_020J7WHALAY0V1toq1RM1g8HHo5k9xJd4Tt",
+            "name": "For Each",
+            "title": "For Each Item in Umbrella-Block-ReqList",
+            "type": "logic.for_each",
+            "base_type": "activity",
+            "properties": {
+              "continue_on_failure": false,
+              "description": "Find the Row wherer the roomID and the MessageID match the Card where the Adaptive action was triggerd by the user\nIf match is found Set the TargetRow Variable with the index if the row. \n\nSource Arr must be set to the Table variable storing the ",
+              "display_name": "For Each Item in Umbrella-Block-ReqList",
+              "skip_execution": false,
+              "source_array": "$global.variable_020SLJ7T1EB3X20fTRumTPwfnvkb8apEmYx.global.variable_020SLJ7T1EB3X20fTRumTPwfnvkb8apEmYx$"
+            },
+            "object_type": "definition_activity",
+            "actions": [
+              {
+                "unique_name": "definition_activity_020J7W3TPYD1L10iownHvKBUV1qeHXz6Mtn",
+                "name": "Condition Block",
+                "title": "Find row for triggered Card",
+                "type": "logic.if_else",
+                "base_type": "activity",
+                "properties": {
+                  "continue_on_failure": false,
+                  "display_name": "Find row for triggered Card",
+                  "skip_execution": false
+                },
+                "object_type": "definition_activity",
+                "blocks": [
+                  {
+                    "unique_name": "definition_activity_020J7W3TZDF0I7Kr2HEWkIir5hXlkYjM2rh",
+                    "name": "Condition Branch",
+                    "title": "Row matches Message and room ID.",
+                    "type": "logic.condition_block",
+                    "base_type": "activity",
+                    "properties": {
+                      "condition": {
+                        "left_operand": {
+                          "left_operand": "$activity.definition_activity_020J7WHALAY0V1toq1RM1g8HHo5k9xJd4Tt.input.source_array[@].MessageID$",
+                          "operator": "eq",
+                          "right_operand": "$activity.definition_activity_020CSI8RR8TXL64EkRB0n3d7zJpjoEE4GKh.output.jsonpath_queries.MessageID$"
+                        },
+                        "operator": "and",
+                        "right_operand": {
+                          "left_operand": "$activity.definition_activity_020J7WHALAY0V1toq1RM1g8HHo5k9xJd4Tt.input.source_array[@].RoomID$",
+                          "operator": "eq",
+                          "right_operand": "$activity.definition_activity_020CSI8RR8TXL64EkRB0n3d7zJpjoEE4GKh.output.jsonpath_queries.RoomID$"
+                        }
+                      },
+                      "continue_on_failure": false,
+                      "display_name": "Row matches Message and room ID.",
+                      "skip_execution": false
+                    },
+                    "object_type": "definition_activity",
+                    "actions": [
+                      {
+                        "unique_name": "definition_activity_020J7YWYY38B07lHwa80CNk7ErJH6bG8dm9",
+                        "name": "Set Variables",
+                        "title": "Set TargetRow Variable with Index of Row",
+                        "type": "core.set_multiple_variables",
+                        "base_type": "activity",
+                        "properties": {
+                          "continue_on_failure": false,
+                          "display_name": "Set TargetRow Variable with Index of Row",
+                          "skip_execution": false,
+                          "variables_to_update": [
+                            {
+                              "variable_to_update": "$workflow.definition_workflow_0206X6DROD3KY1PMKT0wshThUSyPJPIF5r4.local.variable_workflow_020J7ZP42ZOJF05SsKHMhM0iSwrNpOybpKo$",
+                              "variable_value_new": "$activity.definition_activity_020J7WHALAY0V1toq1RM1g8HHo5k9xJd4Tt.input.source_array[@].index$"
+                            }
+                          ]
+                        },
+                        "object_type": "definition_activity"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "unique_name": "definition_activity_020J85SCNABAK5E9A5UV0gBmuEzRQGzq7KZ",
+            "name": "Select from Table",
+            "title": "Select Target Row",
+            "type": "core.selectfromtable",
+            "base_type": "activity",
+            "properties": {
+              "action_timeout": 180,
+              "columns": [
+                {
+                  "column_name": "index",
+                  "column_type": "integer"
+                },
+                {
+                  "column_name": "MessageID",
+                  "column_type": "string"
+                },
+                {
+                  "column_name": "IsPending",
+                  "column_type": "boolean"
+                },
+                {
+                  "column_name": "ApprovalStatus",
+                  "column_type": "boolean"
+                },
+                {
+                  "column_name": "RoomID",
+                  "column_type": "string"
+                },
+                {
+                  "column_name": "RequestDate",
+                  "column_type": "date"
+                },
+                {
+                  "column_name": "FulfillmentDate",
+                  "column_type": "date"
+                },
+                {
+                  "column_name": "Approver",
+                  "column_type": "string"
+                },
+                {
+                  "column_name": "Platform",
+                  "column_type": "string"
+                },
+                {
+                  "column_name": "Action",
+                  "column_type": "string"
+                },
+                {
+                  "column_name": "Observable_Type",
+                  "column_type": "string"
+                },
+                {
+                  "column_name": "Observable_Value",
+                  "column_type": "string"
+                },
+                {
+                  "column_name": "Platform_Action_ID",
+                  "column_type": "string"
+                }
+              ],
+              "continue_on_failure": false,
+              "description": "Used to select the row associaed with the adaptive card the user is interacting with. ",
+              "display_name": "Select Target Row",
+              "input_table": "$global.variable_020SLJ7T1EB3X20fTRumTPwfnvkb8apEmYx.global.variable_020SLJ7T1EB3X20fTRumTPwfnvkb8apEmYx$",
+              "number_of_rows": {
+                "all_rows": true
+              },
+              "persist_output": true,
+              "skip_execution": false,
+              "sorting": {
+                "no_sort": true
+              },
+              "where_clause": "index = $workflow.definition_workflow_0206X6DROD3KY1PMKT0wshThUSyPJPIF5r4.local.variable_workflow_020J7ZP42ZOJF05SsKHMhM0iSwrNpOybpKo$"
+            },
+            "object_type": "definition_activity"
+          }
+        ]
+      },
+      {
+        "unique_name": "definition_activity_020J88P64QRUB6V2HzsIVF5X6lKjjcjF65o",
+        "name": "Condition Block",
+        "title": "Is Apprvoval Task Pending?",
+        "type": "logic.if_else",
+        "base_type": "activity",
+        "properties": {
+          "continue_on_failure": false,
+          "description": "The Following condition will check the global table if the current card the user is interacting with was allready triggered and approved, then take the appropriate action to approve/decline or notify user if no action is required.",
+          "display_name": "Is Apprvoval Task Pending?",
+          "skip_execution": false
+        },
+        "object_type": "definition_activity",
+        "blocks": [
+          {
+            "unique_name": "definition_activity_020J88P6DP9OR7BPMStyrp35dd6hvl3SXDV",
+            "name": "Condition Branch",
+            "title": "YES - Task is in a pending state",
+            "type": "logic.condition_block",
+            "base_type": "activity",
+            "properties": {
+              "condition": {
+                "left_operand": "$activity.definition_activity_020J85SCNABAK5E9A5UV0gBmuEzRQGzq7KZ.output.output_table[-1].IsPending$",
+                "operator": "eq",
+                "right_operand": true
+              },
+              "continue_on_failure": false,
+              "display_name": "YES - Task is in a pending state",
+              "skip_execution": false
+            },
+            "object_type": "definition_activity",
+            "actions": [
+              {
+                "unique_name": "definition_activity_020J8C0JW1AZV7gx8cz0OE0ehle15WazRUT",
+                "name": "Group",
+                "title": "Execute Approval Action Group",
+                "type": "logic.group",
+                "base_type": "activity",
+                "properties": {
+                  "continue_on_failure": false,
+                  "display_name": "Execute Approval Action Group",
+                  "skip_execution": false
+                },
+                "object_type": "definition_activity",
+                "actions": [
+                  {
+                    "unique_name": "definition_activity_020CSW9N09HWW1wo27SwFynitXeITmH6zkc",
+                    "name": "Webex - Get Attachment Action",
+                    "title": "Webex - Get Attachment Action",
+                    "type": "workflow.atomic_workflow",
+                    "base_type": "subworkflow",
+                    "properties": {
+                      "continue_on_failure": false,
+                      "display_name": "Webex - Get Attachment Action",
+                      "input": {
+                        "variable_workflow_020CSSJ67J8NS2OQPPINC5giIwiVhrGQdwe": "ZGNkZjk3OWYtMDU1MS00ZWYzLTkxZmQtZmVhMDlmY2E3NzQ2Y2Y0Yjg2Y2QtMzFl_PF84_1eb65fdf-9643-417f-9974-ad72cae0e10f",
+                        "variable_workflow_020CSSJ67JIOK0UI7ggS7IjLjTmJvkQ1l7u": "$activity.definition_activity_020CSI8RR8TXL64EkRB0n3d7zJpjoEE4GKh.output.jsonpath_queries.AttachmentID$"
+                      },
+                      "runtime_user": {
+                        "target_default": true
+                      },
+                      "skip_execution": false,
+                      "target": {
+                        "execute_on_this_target": true,
+                        "target_id": "definition_target_01LYUOC8X21YK74qAzy87nLRWRDyMEg3ljb",
+                        "target_type": "web-service.endpoint"
+                      },
+                      "workflow_id": "definition_workflow_020CSSJ5UWE1H4yt9Gj1pkYH9suvy2VbVyK",
+                      "workflow_name": "Webex - Get Attachment Action"
+                    },
+                    "object_type": "definition_activity"
+                  },
+                  {
+                    "unique_name": "definition_activity_020CTLWCIXN6H42MaduNWfscjzNLnUUaXll",
+                    "name": "JSONPath Query",
+                    "title": "Query Adaptive card Values",
+                    "type": "corejava.jsonpathquery",
+                    "base_type": "activity",
+                    "properties": {
+                      "action_timeout": 180,
+                      "continue_on_failure": true,
+                      "description": "Gets the name of the user selected in the card and the action of approve or deny. ",
+                      "display_name": "Query Adaptive card Values",
+                      "input_json": "$activity.definition_activity_020CSW9N09HWW1wo27SwFynitXeITmH6zkc.output.variable_workflow_020CT1LIXQ9VO1LUBL8kxsu5xbpecVkeVwq$",
+                      "jsonpath_queries": [
+                        {
+                          "jsonpath_query": "$.inputs.List[1]",
+                          "jsonpath_query_name": "Action",
+                          "jsonpath_query_type": "string"
+                        },
+                        {
+                          "jsonpath_query": "$.inputs.username",
+                          "jsonpath_query_name": "Approver_Username",
+                          "jsonpath_query_type": "string"
+                        }
+                      ],
+                      "skip_execution": false
+                    },
+                    "object_type": "definition_activity"
+                  },
+                  {
+                    "unique_name": "definition_activity_020P02Q83DA705PFpUKpNvM1L364d4HSZMT",
+                    "name": "Condition Block",
+                    "title": "Was a user name selected?",
+                    "type": "logic.if_else",
+                    "base_type": "activity",
+                    "properties": {
+                      "continue_on_failure": false,
+                      "display_name": "Was a user name selected?",
+                      "skip_execution": false
+                    },
+                    "object_type": "definition_activity",
+                    "blocks": [
+                      {
+                        "unique_name": "definition_activity_020P02Q8HG8083uil8kCwxcTytLMUG9iJgv",
+                        "name": "Condition Branch",
+                        "title": "YES",
+                        "type": "logic.condition_block",
+                        "base_type": "activity",
+                        "properties": {
+                          "condition": {
+                            "left_operand": "$activity.definition_activity_020CTLWCIXN6H42MaduNWfscjzNLnUUaXll.output.error.message$",
+                            "operator": "eq",
+                            "right_operand": "action execution  errored for type corejava.jsonpathquery err:code:400 message::No results found for JsonPath: '$.inputs.username'"
+                          },
+                          "continue_on_failure": false,
+                          "display_name": "YES",
+                          "skip_execution": false
+                        },
+                        "object_type": "definition_activity",
+                        "actions": [
+                          {
+                            "unique_name": "definition_activity_020P05VRJV0556iAJ5oaB6jaglOFHwb9ow0",
+                            "name": "Webex Teams - Start Thread in Message",
+                            "title": "Webex Teams - Start Thread in Message",
+                            "type": "workflow.atomic_workflow",
+                            "base_type": "subworkflow",
+                            "properties": {
+                              "continue_on_failure": false,
+                              "display_name": "Webex Teams - Start Thread in Message",
+                              "input": {
+                                "variable_workflow_020C4QO2NHQB14B6SnaNZhnqBZyBeAYFxc0": "Please select a name",
+                                "variable_workflow_020C4QO2NI1833D2Sot5jDWCHOBvZpsB4Mn": "",
+                                "variable_workflow_020C4QO2NI9643gvb1ydt8nRgwZALa4GYNf": "$activity.definition_activity_020CSI8RR8TXL64EkRB0n3d7zJpjoEE4GKh.output.jsonpath_queries.RoomID$",
+                                "variable_workflow_020C4QO2NIV0D7TJLDVY3nh0EDDqEzX9OMz": "$global.variable_02058CN8OL7MN63xYNevaOZPysWo4xpWckW.global.variable_02058CN8OL7MN63xYNevaOZPysWo4xpWckW$",
+                                "variable_workflow_020C4SJ10S31Y1m6FDYJZnHiD9IEjT65Ave": "$activity.definition_activity_020CSI8RR8TXL64EkRB0n3d7zJpjoEE4GKh.output.jsonpath_queries.MessageID$"
+                              },
+                              "runtime_user": {
+                                "target_default": true
+                              },
+                              "skip_execution": false,
+                              "target": {
+                                "override_workflow_target": true,
+                                "target_id": "definition_target_01LYUOC8X21YK74qAzy87nLRWRDyMEg3ljb",
+                                "target_type": "web-service.endpoint"
+                              },
+                              "workflow_id": "definition_workflow_020C4QO2G9VGJ5VBkpQfygvIMXWPP4AQ68Y",
+                              "workflow_name": "Webex Teams - Start Thread in Message"
+                            },
+                            "object_type": "definition_activity"
+                          },
+                          {
+                            "unique_name": "definition_activity_020P07EHGQ64F7cma8fvOj7DHoKikEnwxNj",
+                            "name": "Completed",
+                            "title": "Completed",
+                            "type": "logic.completed",
+                            "base_type": "activity",
+                            "properties": {
+                              "completion_type": "failed-completed",
+                              "continue_on_failure": false,
+                              "display_name": "Completed",
+                              "result_message": "No User Chosen",
+                              "skip_execution": false
+                            },
+                            "object_type": "definition_activity"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "unique_name": "definition_activity_020CTU7JWUK2D4EsqSTsQbhPMUGyd4yPqJz",
+                    "name": "Split String",
+                    "title": "Parse Action String",
+                    "type": "core.splitstring",
+                    "base_type": "activity",
+                    "properties": {
+                      "boundaries": [
+                        {
+                          "boundary": "="
+                        }
+                      ],
+                      "continue_on_failure": false,
+                      "description": "Parse out the action string from the card to determine if action was apporved or denied",
+                      "display_name": "Parse Action String",
+                      "input_string": "$activity.definition_activity_020CTLWCIXN6H42MaduNWfscjzNLnUUaXll.output.jsonpath_queries.Action$",
+                      "skip_execution": false
+                    },
+                    "object_type": "definition_activity"
+                  },
+                  {
+                    "unique_name": "definition_activity_020D1GEYH3ER00xFJEw5zrgx9yxHqHFDzl0",
+                    "name": "Duo MFA Request",
+                    "title": "Duo MFA Request",
+                    "type": "workflow.sub_workflow",
+                    "base_type": "subworkflow",
+                    "properties": {
+                      "continue_on_failure": false,
+                      "display_name": "Duo MFA Request",
+                      "input": {
+                        "variable_workflow_020CVBK5SN7KY1Y7ipxu1DracIBcbs8w5oZ": "DIG48T2YCLQAWZ890CNX",
+                        "variable_workflow_020CVD0V7YUYV6fav7Vwy8xJawr9t48fZFQ": "*****",
+                        "variable_workflow_020CVHY214BD51V5cYhuh4b7Tr9cee85dzI": "$activity.definition_activity_020CTLWCIXN6H42MaduNWfscjzNLnUUaXll.output.jsonpath_queries.Approver_Username$",
+                        "variable_workflow_020CZV7A1UGOQ28KozjwTAm5mALTU7X3oEA": "api-2af31331.duosecurity.com",
+                        "variable_workflow_020CZZHSTGXUE0ib7fBOz6RL1boOxrhjzti": "DIW84SZU2LDA9X8RYMDF",
+                        "variable_workflow_020CZZZPD43VO4NuYDF6OZCRfF4OXtIq2ej": "*****"
+                      },
+                      "runtime_user": {
+                        "target_default": true
+                      },
+                      "skip_execution": false,
+                      "target": {
+                        "execute_on_this_target": true,
+                        "target_id": "definition_target_020CVXW3CSZT75JlboyGQvg4Skc9vAUVfWA",
+                        "target_type": "web-service.endpoint"
+                      },
+                      "workflow_id": "definition_workflow_020CUSNIPISBX54gKeIdAofdLLmomuDbJyV",
+                      "workflow_name": "Duo MFA Request"
+                    },
+                    "object_type": "definition_activity"
+                  },
+                  {
+                    "unique_name": "definition_activity_020NXAJU98SQC1tKtnaQB1FKGISoG9dMuE7",
+                    "name": "Format Date",
+                    "title": "GetReqFullfilmentDate",
+                    "type": "core.format_date",
+                    "base_type": "activity",
+                    "properties": {
+                      "continue_on_failure": false,
+                      "description": "Get the date this action was approved or denied to populate the table with the date. ",
+                      "display_name": "GetReqFullfilmentDate",
+                      "format_string": "02-01-2006",
+                      "original_date": "$activity.definition_activity_020D1GEYH3ER00xFJEw5zrgx9yxHqHFDzl0.output.start_time$",
+                      "skip_execution": false,
+                      "use_custom_format": false
+                    },
+                    "object_type": "definition_activity"
+                  },
+                  {
+                    "unique_name": "definition_activity_020D1H0OIYEZ13bDEJcUwgJgUWpJtowGEnh",
+                    "name": "Condition Block",
+                    "title": "MFA Succeeded and Auth Allowed",
+                    "type": "logic.if_else",
+                    "base_type": "activity",
+                    "properties": {
+                      "continue_on_failure": false,
+                      "description": "This condition checks to see if the MFA push was recieved and action was authorized by Duo",
+                      "display_name": "MFA Succeeded and Auth Allowed",
+                      "skip_execution": false
+                    },
+                    "object_type": "definition_activity",
+                    "blocks": [
+                      {
+                        "unique_name": "definition_activity_020D1H0OV64PN554flqEIMxFu1VPDpnf1vg",
+                        "name": "Condition Branch",
+                        "title": "YES - MFA recieved and AuthN",
+                        "type": "logic.condition_block",
+                        "base_type": "activity",
+                        "properties": {
+                          "condition": {
+                            "left_operand": {
+                              "left_operand": "$activity.definition_activity_020D1GEYH3ER00xFJEw5zrgx9yxHqHFDzl0.output.succeeded$",
+                              "operator": "eq",
+                              "right_operand": true
+                            },
+                            "operator": "and",
+                            "right_operand": {
+                              "left_operand": "$activity.definition_activity_020D1GEYH3ER00xFJEw5zrgx9yxHqHFDzl0.output.variable_workflow_020CY2A9JHV8B6K3etfhpNvwE4De8IgeJGg$",
+                              "operator": "eq",
+                              "right_operand": "allow"
+                            }
+                          },
+                          "continue_on_failure": false,
+                          "display_name": "YES - MFA recieved and AuthN",
+                          "skip_execution": false
+                        },
+                        "object_type": "definition_activity",
+                        "actions": [
+                          {
+                            "unique_name": "definition_activity_020CTPM9NEV962bARUqeZ4fEX2mG5RMz1WC",
+                            "name": "Condition Block",
+                            "title": "Was Task Approved?",
+                            "type": "logic.if_else",
+                            "base_type": "activity",
+                            "properties": {
+                              "continue_on_failure": false,
+                              "description": "This condition used the response from the adaptive action card to determine if the user approved or declined the request. ",
+                              "display_name": "Was Task Approved?",
+                              "skip_execution": false
+                            },
+                            "object_type": "definition_activity",
+                            "blocks": [
+                              {
+                                "unique_name": "definition_activity_020CTPM9Z1WH14PbXyaFMNkc9iG2ywUc7Qd",
+                                "name": "Condition Branch",
+                                "title": "YES - User Chose to aApprove",
+                                "type": "logic.condition_block",
+                                "base_type": "activity",
+                                "properties": {
+                                  "condition": {
+                                    "left_operand": "$activity.definition_activity_020CTU7JWUK2D4EsqSTsQbhPMUGyd4yPqJz.output.parts[-1]$",
+                                    "operator": "eq",
+                                    "right_operand": "Approve"
+                                  },
+                                  "continue_on_failure": false,
+                                  "display_name": "YES - User Chose to aApprove",
+                                  "skip_execution": false
+                                },
+                                "object_type": "definition_activity",
+                                "actions": [
+                                  {
+                                    "unique_name": "definition_activity_020CTP96Z4CLL25NXN6PZaaMdPF6AquEmPu",
+                                    "name": "Set Variables",
+                                    "title": "Approved",
+                                    "type": "core.set_multiple_variables",
+                                    "base_type": "activity",
+                                    "properties": {
+                                      "continue_on_failure": false,
+                                      "display_name": "Approved",
+                                      "skip_execution": false,
+                                      "variables_to_update": [
+                                        {
+                                          "variable_to_update": "$workflow.definition_workflow_0206X6DROD3KY1PMKT0wshThUSyPJPIF5r4.output.variable_workflow_020CTNNE6CBGC3q9GGzzA7PwSmShyFH2nXF$",
+                                          "variable_value_new": true
+                                        },
+                                        {
+                                          "variable_to_update": "$workflow.definition_workflow_0206X6DROD3KY1PMKT0wshThUSyPJPIF5r4.local.variable_workflow_020CSJ7MGPNY91Sc4YjvotCoVcU3iBfKlA9$",
+                                          "variable_value_new": "This action was approved By $activity.definition_activity_020D1GEYH3ER00xFJEw5zrgx9yxHqHFDzl0.output.variable_workflow_020D22NVCG1SZ3PEd6SFyXXwbSgUdJ4YWQT$"
+                                        },
+                                        {
+                                          "variable_to_update": "$workflow.definition_workflow_0206X6DROD3KY1PMKT0wshThUSyPJPIF5r4.local.variable_workflow_020T1COAJ6YEY1edlA60BDs7tkG4I4uRHYg$",
+                                          "variable_value_new": "This action was approved By $activity.definition_activity_020D1GEYH3ER00xFJEw5zrgx9yxHqHFDzl0.output.variable_workflow_020D22NVCG1SZ3PEd6SFyXXwbSgUdJ4YWQT$"
+                                        }
+                                      ]
+                                    },
+                                    "object_type": "definition_activity"
+                                  },
+                                  {
+                                    "unique_name": "definition_activity_020J8I1FL6V4B4VKdIdmla4KUP4lmL9ehZE",
+                                    "name": "Update Row in Table",
+                                    "title": "Update Row in Table",
+                                    "type": "core.updaterowintable",
+                                    "base_type": "activity",
+                                    "properties": {
+                                      "action_timeout": 180,
+                                      "columns": [
+                                        {
+                                          "column_name": "IsPending",
+                                          "column_type": "boolean"
+                                        },
+                                        {
+                                          "column_name": "ApprovalStatus",
+                                          "column_type": "boolean"
+                                        },
+                                        {
+                                          "column_name": "FulfillmentDate",
+                                          "column_type": "date"
+                                        },
+                                        {
+                                          "column_name": "Approver",
+                                          "column_type": "string"
+                                        }
+                                      ],
+                                      "continue_on_failure": false,
+                                      "display_name": "Update Row in Table",
+                                      "input_table": "$global.variable_020SLJ7T1EB3X20fTRumTPwfnvkb8apEmYx.global.variable_020SLJ7T1EB3X20fTRumTPwfnvkb8apEmYx$",
+                                      "row": [
+                                        {
+                                          "key": "IsPending",
+                                          "type": "boolean",
+                                          "value": false
+                                        },
+                                        {
+                                          "key": "ApprovalStatus",
+                                          "type": "boolean",
+                                          "value": true
+                                        },
+                                        {
+                                          "key": "FulfillmentDate",
+                                          "type": "date",
+                                          "value": "$activity.definition_activity_020NXAJU98SQC1tKtnaQB1FKGISoG9dMuE7.output.result$"
+                                        },
+                                        {
+                                          "key": "Approver",
+                                          "type": "string",
+                                          "value": "$activity.definition_activity_020D1GEYH3ER00xFJEw5zrgx9yxHqHFDzl0.output.variable_workflow_020D22NVCG1SZ3PEd6SFyXXwbSgUdJ4YWQT$"
+                                        }
+                                      ],
+                                      "rows": {
+                                        "rows_matching_criteria": true,
+                                        "where_clause": "index = $workflow.definition_workflow_0206X6DROD3KY1PMKT0wshThUSyPJPIF5r4.local.variable_workflow_020J7ZP42ZOJF05SsKHMhM0iSwrNpOybpKo$"
+                                      },
+                                      "skip_execution": false
+                                    },
+                                    "object_type": "definition_activity"
+                                  },
+                                  {
+                                    "unique_name": "definition_activity_020RP2F8JWIY24TfkIxRldkZOY3pxg4PpbJ",
+                                    "name": "Condition Block",
+                                    "title": "What Platform",
+                                    "type": "logic.if_else",
+                                    "base_type": "activity",
+                                    "properties": {
+                                      "continue_on_failure": false,
+                                      "display_name": "What Platform",
+                                      "skip_execution": false
+                                    },
+                                    "object_type": "definition_activity",
+                                    "blocks": [
+                                      {
+                                        "unique_name": "definition_activity_020RP2F8U0GFJ3rGMOvwJpiFZXPPBLq1OVt",
+                                        "name": "Condition Branch",
+                                        "title": "If Umbrella",
+                                        "type": "logic.condition_block",
+                                        "base_type": "activity",
+                                        "properties": {
+                                          "condition": {
+                                            "left_operand": "$activity.definition_activity_020J85SCNABAK5E9A5UV0gBmuEzRQGzq7KZ.output.output_table[0].Platform$",
+                                            "operator": "eq",
+                                            "right_operand": "Umbrella"
+                                          },
+                                          "continue_on_failure": false,
+                                          "display_name": "If Umbrella",
+                                          "skip_execution": false
+                                        },
+                                        "object_type": "definition_activity",
+                                        "actions": [
+                                          {
+                                            "unique_name": "definition_activity_020T363EBA82H3vJ7UuENNs8Vqdprkccwf1",
+                                            "name": "Umbrella - Management - Add Record to Destination List",
+                                            "title": "Umbrella - Management - Add Record to Destination List",
+                                            "type": "workflow.atomic_workflow",
+                                            "base_type": "subworkflow",
+                                            "properties": {
+                                              "continue_on_failure": false,
+                                              "display_name": "Umbrella - Management - Add Record to Destination List",
+                                              "input": {
+                                                "variable_workflow_01PR38PRA8DAV0ueGoV9r6wwpoD7SSF757y": "Added By $activity.definition_activity_020D1GEYH3ER00xFJEw5zrgx9yxHqHFDzl0.output.variable_workflow_020D22NVCG1SZ3PEd6SFyXXwbSgUdJ4YWQT$ with SecureX",
+                                                "variable_workflow_01PR38PRA8HGK1pzCqHFCWKILh6nWkPrpC0": "$global.variable_01VTONYGZKE5V1GudaOqz9ryZNJH9bJHqKe.global.variable_01VTONYGZKE5V1GudaOqz9ryZNJH9bJHqKe$",
+                                                "variable_workflow_01PR38PRA8ISH0QK4PJTeo7pPubN1Ft8vi7": "$activity.definition_activity_020J85SCNABAK5E9A5UV0gBmuEzRQGzq7KZ.output.output_table[-1].Platform_Action_ID$",
+                                                "variable_workflow_01PR38PRA8JXW531nZH86NP15pwRBtmRMOT": "$activity.definition_activity_020J85SCNABAK5E9A5UV0gBmuEzRQGzq7KZ.output.output_table[-1].Observable_Value$"
+                                              },
+                                              "runtime_user": {
+                                                "target_default": true
+                                              },
+                                              "skip_execution": false,
+                                              "target": {
+                                                "override_workflow_target": true,
+                                                "target_id": "definition_target_01VTG9PF6I0T60o50AcC4t0JKbzFAYnUHsD",
+                                                "target_type": "web-service.endpoint"
+                                              },
+                                              "workflow_id": "definition_workflow_01PR38PRIL1R04x7je59e5UtYqDQ0B1NHet",
+                                              "workflow_name": "Umbrella - Management - Add Record to Destination List"
+                                            },
+                                            "object_type": "definition_activity"
+                                          }
+                                        ]
+                                      }
+                                    ]
+                                  }
+                                ]
+                              },
+                              {
+                                "unique_name": "definition_activity_020CTPMACUGXU0VNGZlppg34ZXC9oNxQYms",
+                                "name": "Condition Branch",
+                                "title": "No - User Chose to decline",
+                                "type": "logic.condition_block",
+                                "base_type": "activity",
+                                "properties": {
+                                  "condition": {
+                                    "left_operand": "$activity.definition_activity_020CTU7JWUK2D4EsqSTsQbhPMUGyd4yPqJz.output.parts[-1]$",
+                                    "operator": "ne",
+                                    "right_operand": "Approve"
+                                  },
+                                  "continue_on_failure": false,
+                                  "display_name": "No - User Chose to decline",
+                                  "skip_execution": false
+                                },
+                                "object_type": "definition_activity",
+                                "actions": [
+                                  {
+                                    "unique_name": "definition_activity_020CTPP03RD3B75pbCP9tq5mpveneIGbgGI",
+                                    "name": "Set Variables",
+                                    "title": "Denied",
+                                    "type": "core.set_multiple_variables",
+                                    "base_type": "activity",
+                                    "properties": {
+                                      "continue_on_failure": false,
+                                      "display_name": "Denied",
+                                      "skip_execution": false,
+                                      "variables_to_update": [
+                                        {
+                                          "variable_to_update": "$workflow.definition_workflow_0206X6DROD3KY1PMKT0wshThUSyPJPIF5r4.output.variable_workflow_020CTNNE6CBGC3q9GGzzA7PwSmShyFH2nXF$",
+                                          "variable_value_new": false
+                                        },
+                                        {
+                                          "variable_to_update": "$workflow.definition_workflow_0206X6DROD3KY1PMKT0wshThUSyPJPIF5r4.local.variable_workflow_020CSJ7MGPNY91Sc4YjvotCoVcU3iBfKlA9$",
+                                          "variable_value_new": "Actions was Denied By $activity.definition_activity_020D1GEYH3ER00xFJEw5zrgx9yxHqHFDzl0.output.variable_workflow_020D22NVCG1SZ3PEd6SFyXXwbSgUdJ4YWQT$"
+                                        },
+                                        {
+                                          "variable_to_update": "$workflow.definition_workflow_0206X6DROD3KY1PMKT0wshThUSyPJPIF5r4.local.variable_workflow_020T1COAJ6YEY1edlA60BDs7tkG4I4uRHYg$",
+                                          "variable_value_new": "Actions was Denied By $activity.definition_activity_020D1GEYH3ER00xFJEw5zrgx9yxHqHFDzl0.output.variable_workflow_020D22NVCG1SZ3PEd6SFyXXwbSgUdJ4YWQT$"
+                                        }
+                                      ]
+                                    },
+                                    "object_type": "definition_activity"
+                                  },
+                                  {
+                                    "unique_name": "definition_activity_020J8J9EWY6E442H3pKkp9RQZOaz8SDRUWU",
+                                    "name": "Update Row in Table",
+                                    "title": "Update Row in Table",
+                                    "type": "core.updaterowintable",
+                                    "base_type": "activity",
+                                    "properties": {
+                                      "action_timeout": 180,
+                                      "columns": [
+                                        {
+                                          "column_name": "IsPending",
+                                          "column_type": "boolean"
+                                        },
+                                        {
+                                          "column_name": "ApprovalStatus",
+                                          "column_type": "boolean"
+                                        },
+                                        {
+                                          "column_name": "FulfillmentDate",
+                                          "column_type": "date"
+                                        },
+                                        {
+                                          "column_name": "Approver",
+                                          "column_type": "string"
+                                        }
+                                      ],
+                                      "continue_on_failure": false,
+                                      "display_name": "Update Row in Table",
+                                      "input_table": "$global.variable_020SLJ7T1EB3X20fTRumTPwfnvkb8apEmYx.global.variable_020SLJ7T1EB3X20fTRumTPwfnvkb8apEmYx$",
+                                      "row": [
+                                        {
+                                          "key": "IsPending",
+                                          "type": "boolean",
+                                          "value": false
+                                        },
+                                        {
+                                          "key": "ApprovalStatus",
+                                          "type": "boolean",
+                                          "value": false
+                                        },
+                                        {
+                                          "key": "FulfillmentDate",
+                                          "type": "date",
+                                          "value": "$activity.definition_activity_020NXAJU98SQC1tKtnaQB1FKGISoG9dMuE7.output.result$"
+                                        },
+                                        {
+                                          "key": "Approver",
+                                          "type": "string",
+                                          "value": "$activity.definition_activity_020D1GEYH3ER00xFJEw5zrgx9yxHqHFDzl0.output.variable_workflow_020D22NVCG1SZ3PEd6SFyXXwbSgUdJ4YWQT$"
+                                        }
+                                      ],
+                                      "rows": {
+                                        "rows_matching_criteria": true,
+                                        "where_clause": "index = $workflow.definition_workflow_0206X6DROD3KY1PMKT0wshThUSyPJPIF5r4.local.variable_workflow_020J7ZP42ZOJF05SsKHMhM0iSwrNpOybpKo$"
+                                      },
+                                      "skip_execution": false
+                                    },
+                                    "object_type": "definition_activity"
+                                  }
+                                ]
+                              }
+                            ]
+                          },
+                          {
+                            "unique_name": "definition_activity_020D1XDV04DVJ0EQQWJJKwxVd8PDVXbc77d",
+                            "name": "Webex Teams - Start Thread in Message",
+                            "title": "Webex Teams - Start Thread in Message",
+                            "type": "workflow.atomic_workflow",
+                            "base_type": "subworkflow",
+                            "properties": {
+                              "continue_on_failure": false,
+                              "display_name": "Webex Teams - Start Thread in Message",
+                              "input": {
+                                "variable_workflow_020C4QO2NHQB14B6SnaNZhnqBZyBeAYFxc0": "$workflow.definition_workflow_0206X6DROD3KY1PMKT0wshThUSyPJPIF5r4.local.variable_workflow_020T1COAJ6YEY1edlA60BDs7tkG4I4uRHYg$",
+                                "variable_workflow_020C4QO2NI1833D2Sot5jDWCHOBvZpsB4Mn": "",
+                                "variable_workflow_020C4QO2NI9643gvb1ydt8nRgwZALa4GYNf": "$activity.definition_activity_020CSI8RR8TXL64EkRB0n3d7zJpjoEE4GKh.output.jsonpath_queries.RoomID$",
+                                "variable_workflow_020C4QO2NIV0D7TJLDVY3nh0EDDqEzX9OMz": "$global.variable_02058CN8OL7MN63xYNevaOZPysWo4xpWckW.global.variable_02058CN8OL7MN63xYNevaOZPysWo4xpWckW$",
+                                "variable_workflow_020C4SJ10S31Y1m6FDYJZnHiD9IEjT65Ave": "$activity.definition_activity_020CSI8RR8TXL64EkRB0n3d7zJpjoEE4GKh.output.jsonpath_queries.MessageID$"
+                              },
+                              "runtime_user": {
+                                "target_default": true
+                              },
+                              "skip_execution": false,
+                              "target": {
+                                "override_workflow_target": true,
+                                "target_id": "definition_target_01LYUOC8X21YK74qAzy87nLRWRDyMEg3ljb",
+                                "target_type": "web-service.endpoint"
+                              },
+                              "workflow_id": "definition_workflow_020C4QO2G9VGJ5VBkpQfygvIMXWPP4AQ68Y",
+                              "workflow_name": "Webex Teams - Start Thread in Message"
+                            },
+                            "object_type": "definition_activity"
+                          }
+                        ]
+                      },
+                      {
+                        "unique_name": "definition_activity_020D1H0P5G0JL6llECE7p6suCcmVo6JQr8v",
+                        "name": "Condition Branch",
+                        "title": "NO - MFA Failed",
+                        "type": "logic.condition_block",
+                        "base_type": "activity",
+                        "properties": {
+                          "condition": {
+                            "left_operand": {
+                              "left_operand": "$activity.definition_activity_020D1GEYH3ER00xFJEw5zrgx9yxHqHFDzl0.output.succeeded$",
+                              "operator": "eq",
+                              "right_operand": false
+                            },
+                            "operator": "or",
+                            "right_operand": {
+                              "left_operand": "$activity.definition_activity_020D1GEYH3ER00xFJEw5zrgx9yxHqHFDzl0.output.variable_workflow_020CY2A9JHV8B6K3etfhpNvwE4De8IgeJGg$",
+                              "operator": "eq",
+                              "right_operand": "deny"
+                            }
+                          },
+                          "continue_on_failure": false,
+                          "description": "MFA Failure - next condition determine what type of failure. ",
+                          "display_name": "NO - MFA Failed",
+                          "skip_execution": false
+                        },
+                        "object_type": "definition_activity",
+                        "actions": [
+                          {
+                            "unique_name": "definition_activity_020PRP3QX9FPF3xDrqPOBZoacVfDIelRhmy",
+                            "name": "Condition Block",
+                            "title": "What type AuthN Failure?",
+                            "type": "logic.if_else",
+                            "base_type": "activity",
+                            "properties": {
+                              "continue_on_failure": false,
+                              "description": "This condition determines what type of failurr occured so the appropriate response can be sent back to the user. ",
+                              "display_name": "What type AuthN Failure?",
+                              "skip_execution": false
+                            },
+                            "object_type": "definition_activity",
+                            "blocks": [
+                              {
+                                "unique_name": "definition_activity_020PRP3R84YGZ50ewePIWwF45ndGUYYDR65",
+                                "name": "Condition Branch",
+                                "title": "Login Timeout",
+                                "type": "logic.condition_block",
+                                "base_type": "activity",
+                                "properties": {
+                                  "condition": {
+                                    "left_operand": "$activity.definition_activity_020D1GEYH3ER00xFJEw5zrgx9yxHqHFDzl0.output.variable_workflow_020CYRTXY8ROU47hBta737aS1VJ6lopJkMD$",
+                                    "operator": "eq",
+                                    "right_operand": "Login timed out."
+                                  },
+                                  "continue_on_failure": false,
+                                  "description": "User did not respond to the MFA push and the AuthN timed out",
+                                  "display_name": "Login Timeout",
+                                  "skip_execution": false
+                                },
+                                "object_type": "definition_activity",
+                                "actions": [
+                                  {
+                                    "unique_name": "definition_activity_020T1MVJMB9HB11nO2Clu5HETuEjuUe17FM",
+                                    "name": "Set Variables",
+                                    "title": "Set response - Timed Out",
+                                    "type": "core.set_multiple_variables",
+                                    "base_type": "activity",
+                                    "properties": {
+                                      "continue_on_failure": false,
+                                      "display_name": "Set response - Timed Out",
+                                      "skip_execution": false,
+                                      "variables_to_update": [
+                                        {
+                                          "variable_to_update": "$workflow.definition_workflow_0206X6DROD3KY1PMKT0wshThUSyPJPIF5r4.output.variable_workflow_020CTNNE6CBGC3q9GGzzA7PwSmShyFH2nXF$",
+                                          "variable_value_new": false
+                                        },
+                                        {
+                                          "variable_to_update": "$workflow.definition_workflow_0206X6DROD3KY1PMKT0wshThUSyPJPIF5r4.local.variable_workflow_020CSJ7MGPNY91Sc4YjvotCoVcU3iBfKlA9$",
+                                          "variable_value_new": "Actions was Denied By $activity.definition_activity_020D1GEYH3ER00xFJEw5zrgx9yxHqHFDzl0.output.variable_workflow_020D22NVCG1SZ3PEd6SFyXXwbSgUdJ4YWQT$"
+                                        },
+                                        {
+                                          "variable_to_update": "$workflow.definition_workflow_0206X6DROD3KY1PMKT0wshThUSyPJPIF5r4.local.variable_workflow_020T1COAJ6YEY1edlA60BDs7tkG4I4uRHYg$",
+                                          "variable_value_new": "MFA request timed out - Try again"
+                                        }
+                                      ]
+                                    },
+                                    "object_type": "definition_activity"
+                                  }
+                                ]
+                              },
+                              {
+                                "unique_name": "definition_activity_020PRU3HZBH314Y7upNuxRKXPhMWGXDLy7A",
+                                "name": "Condition Branch",
+                                "title": "Login Denied",
+                                "type": "logic.condition_block",
+                                "base_type": "activity",
+                                "properties": {
+                                  "condition": {
+                                    "left_operand": "$activity.definition_activity_020D1GEYH3ER00xFJEw5zrgx9yxHqHFDzl0.output.variable_workflow_020CYRTXY8ROU47hBta737aS1VJ6lopJkMD$",
+                                    "operator": "eq",
+                                    "right_operand": "Login request denied."
+                                  },
+                                  "continue_on_failure": false,
+                                  "description": "User Denied the Push",
+                                  "display_name": "Login Denied",
+                                  "skip_execution": false
+                                },
+                                "object_type": "definition_activity",
+                                "actions": [
+                                  {
+                                    "unique_name": "definition_activity_020T1N1BZPETN0VNMKvuTaV66mnbHlthJkj",
+                                    "name": "Set Variables",
+                                    "title": "Set Response - AuthN Declined",
+                                    "type": "core.set_multiple_variables",
+                                    "base_type": "activity",
+                                    "properties": {
+                                      "continue_on_failure": false,
+                                      "display_name": "Set Response - AuthN Declined",
+                                      "skip_execution": false,
+                                      "variables_to_update": [
+                                        {
+                                          "variable_to_update": "$workflow.definition_workflow_0206X6DROD3KY1PMKT0wshThUSyPJPIF5r4.output.variable_workflow_020CTNNE6CBGC3q9GGzzA7PwSmShyFH2nXF$",
+                                          "variable_value_new": false
+                                        },
+                                        {
+                                          "variable_to_update": "$workflow.definition_workflow_0206X6DROD3KY1PMKT0wshThUSyPJPIF5r4.local.variable_workflow_020CSJ7MGPNY91Sc4YjvotCoVcU3iBfKlA9$",
+                                          "variable_value_new": "Actions was Denied By $activity.definition_activity_020D1GEYH3ER00xFJEw5zrgx9yxHqHFDzl0.output.variable_workflow_020D22NVCG1SZ3PEd6SFyXXwbSgUdJ4YWQT$"
+                                        },
+                                        {
+                                          "variable_to_update": "$workflow.definition_workflow_0206X6DROD3KY1PMKT0wshThUSyPJPIF5r4.local.variable_workflow_020T1COAJ6YEY1edlA60BDs7tkG4I4uRHYg$",
+                                          "variable_value_new": "MFA Authentication declined by $activity.definition_activity_020D1GEYH3ER00xFJEw5zrgx9yxHqHFDzl0.output.variable_workflow_020D22NVCG1SZ3PEd6SFyXXwbSgUdJ4YWQT$"
+                                        }
+                                      ]
+                                    },
+                                    "object_type": "definition_activity"
+                                  }
+                                ]
+                              }
+                            ]
+                          },
+                          {
+                            "unique_name": "definition_activity_020T1JAHS5O2N1fDFArsB9AzrcFZ6cKbSdj",
+                            "name": "Webex Teams - Start Thread in Message",
+                            "title": "Webex Teams - Start Thread in Message",
+                            "type": "workflow.atomic_workflow",
+                            "base_type": "subworkflow",
+                            "properties": {
+                              "continue_on_failure": false,
+                              "display_name": "Webex Teams - Start Thread in Message",
+                              "input": {
+                                "variable_workflow_020C4QO2NHQB14B6SnaNZhnqBZyBeAYFxc0": "$workflow.definition_workflow_0206X6DROD3KY1PMKT0wshThUSyPJPIF5r4.local.variable_workflow_020T1COAJ6YEY1edlA60BDs7tkG4I4uRHYg$",
+                                "variable_workflow_020C4QO2NI1833D2Sot5jDWCHOBvZpsB4Mn": "",
+                                "variable_workflow_020C4QO2NI9643gvb1ydt8nRgwZALa4GYNf": "$activity.definition_activity_020CSI8RR8TXL64EkRB0n3d7zJpjoEE4GKh.output.jsonpath_queries.RoomID$",
+                                "variable_workflow_020C4QO2NIV0D7TJLDVY3nh0EDDqEzX9OMz": "$global.variable_02058CN8OL7MN63xYNevaOZPysWo4xpWckW.global.variable_02058CN8OL7MN63xYNevaOZPysWo4xpWckW$",
+                                "variable_workflow_020C4SJ10S31Y1m6FDYJZnHiD9IEjT65Ave": "$activity.definition_activity_020CSI8RR8TXL64EkRB0n3d7zJpjoEE4GKh.output.jsonpath_queries.MessageID$"
+                              },
+                              "runtime_user": {
+                                "target_default": true
+                              },
+                              "skip_execution": false,
+                              "target": {
+                                "override_workflow_target": true,
+                                "target_id": "definition_target_01LYUOC8X21YK74qAzy87nLRWRDyMEg3ljb",
+                                "target_type": "web-service.endpoint"
+                              },
+                              "workflow_id": "definition_workflow_020C4QO2G9VGJ5VBkpQfygvIMXWPP4AQ68Y",
+                              "workflow_name": "Webex Teams - Start Thread in Message"
+                            },
+                            "object_type": "definition_activity"
+                          },
+                          {
+                            "unique_name": "definition_activity_020D1KZJUXZC50JA8WbJB6AR4UP3QbwgKkK",
+                            "name": "Completed",
+                            "title": "Completed",
+                            "type": "logic.completed",
+                            "base_type": "activity",
+                            "properties": {
+                              "completion_type": "failed-completed",
+                              "continue_on_failure": false,
+                              "display_name": "Completed",
+                              "result_message": "$activity.definition_activity_020D1GEYH3ER00xFJEw5zrgx9yxHqHFDzl0.output.variable_workflow_020CYRTXY8ROU47hBta737aS1VJ6lopJkMD$",
+                              "skip_execution": false
+                            },
+                            "object_type": "definition_activity"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "unique_name": "definition_activity_020J8AI7Q98L75A8U0jcpXsMDSp525b1btI",
+            "name": "Condition Branch",
+            "title": "NO - An Approval Task was already performed",
+            "type": "logic.condition_block",
+            "base_type": "activity",
+            "properties": {
+              "condition": {
+                "left_operand": "$activity.definition_activity_020J85SCNABAK5E9A5UV0gBmuEzRQGzq7KZ.output.output_table[-1].IsPending$",
+                "operator": "eq",
+                "right_operand": false
+              },
+              "continue_on_failure": false,
+              "display_name": "NO - An Approval Task was already performed",
+              "skip_execution": false
+            },
+            "object_type": "definition_activity",
+            "actions": [
+              {
+                "unique_name": "definition_activity_020J8PKQ4GAI64ZMAyEyuoAORup5cYI6QNt",
+                "name": "Condition Block",
+                "title": "Was it approved or Denied?",
+                "type": "logic.if_else",
+                "base_type": "activity",
+                "properties": {
+                  "continue_on_failure": false,
+                  "display_name": "Was it approved or Denied?",
+                  "skip_execution": false
+                },
+                "object_type": "definition_activity",
+                "blocks": [
+                  {
+                    "unique_name": "definition_activity_020J8PKQCLTM96WwSS2p4RJdhq2TKCRTifW",
+                    "name": "Condition Branch",
+                    "title": "Approved",
+                    "type": "logic.condition_block",
+                    "base_type": "activity",
+                    "properties": {
+                      "condition": {
+                        "left_operand": "$activity.definition_activity_020J85SCNABAK5E9A5UV0gBmuEzRQGzq7KZ.output.output_table[-1].ApprovalStatus$",
+                        "operator": "eq",
+                        "right_operand": true
+                      },
+                      "continue_on_failure": false,
+                      "display_name": "Approved",
+                      "skip_execution": false
+                    },
+                    "object_type": "definition_activity",
+                    "actions": [
+                      {
+                        "unique_name": "definition_activity_020J8R3M42WY31oTnwf0qe3b3sgBs6wBXzJ",
+                        "name": "Set Variables",
+                        "title": "Set ApprovalStatus",
+                        "type": "core.set_multiple_variables",
+                        "base_type": "activity",
+                        "properties": {
+                          "continue_on_failure": false,
+                          "display_name": "Set ApprovalStatus",
+                          "skip_execution": false,
+                          "variables_to_update": [
+                            {
+                              "variable_to_update": "$workflow.definition_workflow_0206X6DROD3KY1PMKT0wshThUSyPJPIF5r4.local.variable_workflow_020T1COAJ6YEY1edlA60BDs7tkG4I4uRHYg$",
+                              "variable_value_new": "This request was already approved by $activity.definition_activity_020J85SCNABAK5E9A5UV0gBmuEzRQGzq7KZ.output.output_table[0].Approver$."
+                            }
+                          ]
+                        },
+                        "object_type": "definition_activity"
+                      }
+                    ]
+                  },
+                  {
+                    "unique_name": "definition_activity_020J8PKQMRMAJ7hKRokboeTZPOabk7cGpZD",
+                    "name": "Condition Branch",
+                    "title": "Declined",
+                    "type": "logic.condition_block",
+                    "base_type": "activity",
+                    "properties": {
+                      "condition": {
+                        "left_operand": "$activity.definition_activity_020J85SCNABAK5E9A5UV0gBmuEzRQGzq7KZ.output.output_table[-1].ApprovalStatus$",
+                        "operator": "eq",
+                        "right_operand": false
+                      },
+                      "continue_on_failure": false,
+                      "display_name": "Declined",
+                      "skip_execution": false
+                    },
+                    "object_type": "definition_activity",
+                    "actions": [
+                      {
+                        "unique_name": "definition_activity_020J8RC7K5IFW4ZZRyfHPALhJNdIR4NJclf",
+                        "name": "Set Variables",
+                        "title": "Set ApprovalStatus",
+                        "type": "core.set_multiple_variables",
+                        "base_type": "activity",
+                        "properties": {
+                          "continue_on_failure": false,
+                          "display_name": "Set ApprovalStatus",
+                          "skip_execution": false,
+                          "variables_to_update": [
+                            {
+                              "variable_to_update": "$workflow.definition_workflow_0206X6DROD3KY1PMKT0wshThUSyPJPIF5r4.local.variable_workflow_020T1COAJ6YEY1edlA60BDs7tkG4I4uRHYg$",
+                              "variable_value_new": "This request was already declined by $activity.definition_activity_020J85SCNABAK5E9A5UV0gBmuEzRQGzq7KZ.output.output_table[0].Approver$."
+                            }
+                          ]
+                        },
+                        "object_type": "definition_activity"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "unique_name": "definition_activity_020J8DJLI8G3D4N04dh78kud2xGuvBr6vVD",
+                "name": "Webex Teams - Start Thread in Message",
+                "title": "Webex Teams - Start Thread in Message",
+                "type": "workflow.atomic_workflow",
+                "base_type": "subworkflow",
+                "properties": {
+                  "continue_on_failure": false,
+                  "display_name": "Webex Teams - Start Thread in Message",
+                  "input": {
+                    "variable_workflow_020C4QO2NHQB14B6SnaNZhnqBZyBeAYFxc0": "$workflow.definition_workflow_0206X6DROD3KY1PMKT0wshThUSyPJPIF5r4.local.variable_workflow_020T1COAJ6YEY1edlA60BDs7tkG4I4uRHYg$",
+                    "variable_workflow_020C4QO2NI1833D2Sot5jDWCHOBvZpsB4Mn": "",
+                    "variable_workflow_020C4QO2NI9643gvb1ydt8nRgwZALa4GYNf": "$activity.definition_activity_020CSI8RR8TXL64EkRB0n3d7zJpjoEE4GKh.output.jsonpath_queries.RoomID$",
+                    "variable_workflow_020C4QO2NIV0D7TJLDVY3nh0EDDqEzX9OMz": "$global.variable_02058CN8OL7MN63xYNevaOZPysWo4xpWckW.global.variable_02058CN8OL7MN63xYNevaOZPysWo4xpWckW$",
+                    "variable_workflow_020C4SJ10S31Y1m6FDYJZnHiD9IEjT65Ave": "$activity.definition_activity_020CSI8RR8TXL64EkRB0n3d7zJpjoEE4GKh.output.jsonpath_queries.MessageID$"
+                  },
+                  "runtime_user": {
+                    "target_default": true
+                  },
+                  "skip_execution": false,
+                  "target": {
+                    "override_workflow_target": true,
+                    "target_id": "definition_target_01LYUOC8X21YK74qAzy87nLRWRDyMEg3ljb",
+                    "target_type": "web-service.endpoint"
+                  },
+                  "workflow_id": "definition_workflow_020C4QO2G9VGJ5VBkpQfygvIMXWPP4AQ68Y",
+                  "workflow_name": "Webex Teams - Start Thread in Message"
+                },
+                "object_type": "definition_activity"
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "categories": [
+      "category_01WP7A6HKXUQ45kzpk5nMHdP8VADtokMxCW",
+      "category_020B9ISQG70YY7amOQ9sYg4gmV2UKhfbR37",
+      "category_020RICOYU9KW90M3Dg6DiB7b5bi7TlCXjJQ"
+    ]
+  },
+  "categories": {
+    "category_01WP7A6HKXUQ45kzpk5nMHdP8VADtokMxCW": {
+      "unique_name": "category_01WP7A6HKXUQ45kzpk5nMHdP8VADtokMxCW",
+      "name": "Production",
+      "title": "Production",
+      "type": "basic.category",
+      "base_type": "category",
+      "description": "Workflows working in production",
+      "category_type": "custom",
+      "object_type": "category"
+    },
+    "category_020B9ISQG70YY7amOQ9sYg4gmV2UKhfbR37": {
+      "unique_name": "category_020B9ISQG70YY7amOQ9sYg4gmV2UKhfbR37",
+      "name": "Webex Teams",
+      "title": "Webex Teams",
+      "type": "basic.category",
+      "base_type": "category",
+      "category_type": "custom",
+      "object_type": "category"
+    },
+    "category_020CXHGRZYYMU5dxGhpZiqL5LbKSyHNYNrb": {
+      "unique_name": "category_020CXHGRZYYMU5dxGhpZiqL5LbKSyHNYNrb",
+      "name": "Duo",
+      "title": "Duo",
+      "type": "basic.category",
+      "base_type": "category",
+      "category_type": "custom",
+      "object_type": "category"
+    },
+    "category_020RICOYU9KW90M3Dg6DiB7b5bi7TlCXjJQ": {
+      "unique_name": "category_020RICOYU9KW90M3Dg6DiB7b5bi7TlCXjJQ",
+      "name": "Webex - Request Approval Flow",
+      "title": "Webex - Request Approval Flow",
+      "type": "basic.category",
+      "base_type": "category",
+      "description": "Workflows related to the request approval process buitl for Webex Teams",
+      "category_type": "custom",
+      "object_type": "category"
+    }
+  },
+  "triggers": {
+    "triggerevent_020BYJZDOZZKV6vWNt4bqQhz3FhuHprkl9t": {
+      "workflow_id": "definition_workflow_0206X6DROD3KY1PMKT0wshThUSyPJPIF5r4",
+      "name": "Attachment Action",
+      "title": "",
+      "lowercase_name": "event.attachment_action",
+      "type": "event",
+      "base_type": "trigger",
+      "ref_id": "event_webhook_0206X8M7UYTZE176cIOJDnyVOqVAxU89cbT",
+      "version": "1.0.0",
+      "disabled": false,
+      "unique_name": "triggerevent_020BYJZDOZZKV6vWNt4bqQhz3FhuHprkl9t",
+      "object_type": "triggerevent"
+    }
+  },
+  "events": {
+    "event_webhook_0206X8M7UYTZE176cIOJDnyVOqVAxU89cbT": {
+      "name": "Webex-Teams-AdaptiveCard-Action",
+      "title": "Webex-Teams-AdaptiveCard-Action",
+      "type": "webhook.event",
+      "base_type": "event",
+      "object_type": "event_webhook",
+      "target_id": "",
+      "webhook_id": "webhook_0206W1QB4ME0H5kv7o2yn14Xv1biSKeeprO",
+      "version": "1.0.0",
+      "properties": {
+        "display_name": "Webex-Teams-Message",
+        "title": "Webex-Teams-AdaptiveCard-Action",
+        "webhook_id": "webhook_0206W1QB4ME0H5kv7o2yn14Xv1biSKeeprO"
+      },
+      "unique_name": "event_webhook_0206X8M7UYTZE176cIOJDnyVOqVAxU89cbT"
+    }
+  },
+  "targets": {
+    "definition_target_01LYUOC8X21YK74qAzy87nLRWRDyMEg3ljb": {
+      "unique_name": "definition_target_01LYUOC8X21YK74qAzy87nLRWRDyMEg3ljb",
+      "name": "Webex Teams",
+      "title": "Webex Teams",
+      "type": "web-service.endpoint",
+      "base_type": "target",
+      "object_type": "definition_target",
+      "properties": {
+        "description": "Webex Teams",
+        "disable_certificate_validation": false,
+        "display_name": "Webex Teams",
+        "host": "webexapis.com",
+        "no_runtime_user": true,
+        "port": 443,
+        "protocol": "https"
+      }
+    },
+    "definition_target_01VTG9PF6I0T60o50AcC4t0JKbzFAYnUHsD": {
+      "unique_name": "definition_target_01VTG9PF6I0T60o50AcC4t0JKbzFAYnUHsD",
+      "name": "Umbrella Management",
+      "title": "Umbrella Management",
+      "type": "web-service.endpoint",
+      "base_type": "target",
+      "object_type": "definition_target",
+      "properties": {
+        "default_runtime_user_id": "definition_runtime_user_01VTG978Y15NS19Nx0pKX6qq7Jo2XOPqMhK",
+        "disable_certificate_validation": false,
+        "display_name": "Umbrella Management",
+        "host": "management.api.umbrella.com",
+        "ignore_proxy": true,
+        "no_runtime_user": false,
+        "port": 443,
+        "protocol": "https"
+      }
+    },
+    "definition_target_020CVXW3CSZT75JlboyGQvg4Skc9vAUVfWA": {
+      "unique_name": "definition_target_020CVXW3CSZT75JlboyGQvg4Skc9vAUVfWA",
+      "name": "Duo API Auth",
+      "title": "Duo API Auth",
+      "type": "web-service.endpoint",
+      "base_type": "target",
+      "object_type": "definition_target",
+      "properties": {
+        "disable_certificate_validation": false,
+        "display_name": "Duo API Auth",
+        "host": "api-2af31331.duosecurity.com",
+        "ignore_proxy": false,
+        "no_runtime_user": true,
+        "port": 443,
+        "protocol": "https"
+      }
+    }
+  },
+  "runtime_users": {
+    "definition_runtime_user_01VTG978Y15NS19Nx0pKX6qq7Jo2XOPqMhK": {
+      "unique_name": "definition_runtime_user_01VTG978Y15NS19Nx0pKX6qq7Jo2XOPqMhK",
+      "name": "Umbrella Management",
+      "title": "Umbrella Management",
+      "type": "runtime_user.web-service_basic_credentials",
+      "base_type": "runtime_user",
+      "object_type": "definition_runtime_user",
+      "properties": {
+        "auth_option": "Basic",
+        "basic_password": "*****",
+        "basic_username": "27853da5ab8c4eefb4f09b693bce0a8d",
+        "description": "From Umbrella API keys \n\nUsername: Client ID\nPassword: Client Secret",
+        "display_name": "Umbrella Management"
+      }
+    }
+  },
+  "variables": {
+    "variable_01VTONYGZKE5V1GudaOqz9ryZNJH9bJHqKe": {
+      "unique_name": "variable_01VTONYGZKE5V1GudaOqz9ryZNJH9bJHqKe",
+      "properties": {
+        "value": "2642070",
+        "scope": "global",
+        "name": "CDNET-UmbrellaOrg",
+        "type": "datatype.string",
+        "description": "Umbrella Org ID for My Lab",
+        "is_required": false,
+        "is_invisible": false
+      },
+      "object_type": "variable"
+    },
+    "variable_02058CN8OL7MN63xYNevaOZPysWo4xpWckW": {
+      "unique_name": "variable_02058CN8OL7MN63xYNevaOZPysWo4xpWckW",
+      "properties": {
+        "value": "*****",
+        "scope": "global",
+        "name": "CDNET-AdaptiveCardBot-AccessToken",
+        "type": "datatype.secure_string",
+        "is_required": false,
+        "is_invisible": false
+      },
+      "object_type": "variable"
+    },
+    "variable_020SLJ7T1EB3X20fTRumTPwfnvkb8apEmYx": {
+      "unique_name": "variable_020SLJ7T1EB3X20fTRumTPwfnvkb8apEmYx",
+      "schema_id": "tabletype_020SL0SOZU0DH3q4k3NLyDK2rlngLNigj14",
+      "properties": {
+        "value": [
+          {
+            "column_data": {
+              "Action": "Block",
+              "ApprovalStatus": true,
+              "Approver": "Christopher D'Aguanno",
+              "FulfillmentDate": "2022-10-19T16:44:49.682062361Z",
+              "IsPending": false,
+              "MessageID": "Y2lzY29zcGFyazovL3VzL01FU1NBR0UvNGI4MjY0ODAtNGZjZC0xMWVkLWE5MWQtZWZhNWZjYWYzZjE5",
+              "Observable_Type": "domain",
+              "Observable_Vale": "",
+              "Observable_Value": "ifconfig.me",
+              "Platform": "Umbrella",
+              "Platform_Action_ID": "15592557",
+              "RequestDate": "19-10-2022",
+              "RoomID": "Y2lzY29zcGFyazovL3VzL1JPT00vNDc2MDczNTAtNDAyZS0xMWVkLTliZjktZjc1MTYzZDRlMTg4",
+              "index": 1
+            }
+          },
+          {
+            "column_data": {
+              "Action": "Block",
+              "ApprovalStatus": true,
+              "Approver": "Christopher D'Aguanno",
+              "FulfillmentDate": "19-10-2022",
+              "IsPending": false,
+              "MessageID": "Y2lzY29zcGFyazovL3VzL01FU1NBR0UvMmEzODE4NTAtNGZjZS0xMWVkLWJhMDItODNlMTJjYmFhYzFi",
+              "Observable_Type": "domain",
+              "Observable_Value": "ifconfig.me",
+              "Platform": "Umbrella",
+              "Platform_Action_ID": "15592557",
+              "RequestDate": "19-10-2022",
+              "RoomID": "Y2lzY29zcGFyazovL3VzL1JPT00vNDc2MDczNTAtNDAyZS0xMWVkLTliZjktZjc1MTYzZDRlMTg4",
+              "index": 2
+            }
+          },
+          {
+            "column_data": {
+              "Action": "Block",
+              "ApprovalStatus": true,
+              "Approver": "Christopher D'Aguanno",
+              "FulfillmentDate": "19-10-2022",
+              "IsPending": false,
+              "MessageID": "Y2lzY29zcGFyazovL3VzL01FU1NBR0UvYWNjNmNiNDAtNGZjZS0xMWVkLTlkNDktZWRjNzFlNTE3MTVm",
+              "Observable_Type": "domain",
+              "Observable_Value": "ifconfig.me",
+              "Platform": "Umbrella",
+              "Platform_Action_ID": "15592557",
+              "RequestDate": "19-10-2022",
+              "RoomID": "Y2lzY29zcGFyazovL3VzL1JPT00vNDc2MDczNTAtNDAyZS0xMWVkLTliZjktZjc1MTYzZDRlMTg4",
+              "index": 3
+            }
+          },
+          {
+            "column_data": {
+              "Action": "Block",
+              "ApprovalStatus": true,
+              "Approver": "Christopher D'Aguanno",
+              "FulfillmentDate": "19-10-2022",
+              "IsPending": false,
+              "MessageID": "Y2lzY29zcGFyazovL3VzL01FU1NBR0UvMDcxOGU1MTAtNGZjZi0xMWVkLTkyMWYtMDExNWNhYWMwZDM1",
+              "Observable_Type": "domain",
+              "Observable_Value": "ifconfig.me",
+              "Platform": "Umbrella",
+              "Platform_Action_ID": "15592557",
+              "RequestDate": "19-10-2022",
+              "RoomID": "Y2lzY29zcGFyazovL3VzL1JPT00vNDc2MDczNTAtNDAyZS0xMWVkLTliZjktZjc1MTYzZDRlMTg4",
+              "index": 4
+            }
+          },
+          {
+            "column_data": {
+              "Action": "Block",
+              "ApprovalStatus": true,
+              "Approver": "Christopher D'Aguanno",
+              "FulfillmentDate": "19-10-2022",
+              "IsPending": false,
+              "MessageID": "Y2lzY29zcGFyazovL3VzL01FU1NBR0UvZTkwYTFmNjAtNGZkMC0xMWVkLTg3NTUtN2YyNGUyMWY2YjNm",
+              "Observable_Type": "domain",
+              "Observable_Value": "ipinfo.io",
+              "Platform": "Umbrella",
+              "Platform_Action_ID": "15592557",
+              "RequestDate": "19-10-2022",
+              "RoomID": "Y2lzY29zcGFyazovL3VzL1JPT00vNDc2MDczNTAtNDAyZS0xMWVkLTliZjktZjc1MTYzZDRlMTg4",
+              "index": 5
+            }
+          }
+        ],
+        "scope": "global",
+        "name": "Task_Approval_Table-v3",
+        "type": "datatype.table",
+        "is_required": false,
+        "is_invisible": false
+      },
+      "object_type": "variable"
+    }
+  },
+  "table_types": {
+    "tabletype_020SL0SOZU0DH3q4k3NLyDK2rlngLNigj14": {
+      "unique_name": "tabletype_020SL0SOZU0DH3q4k3NLyDK2rlngLNigj14",
+      "data_type": "datatype.tabletype",
+      "display_name": "Task_Approval_Table-v3",
+      "columns": [
+        {
+          "name": "RoomID",
+          "title": "RoomID",
+          "type": "string"
+        },
+        {
+          "name": "IsPending",
+          "title": "IsPending",
+          "type": "boolean"
+        },
+        {
+          "name": "RequestDate",
+          "title": "RequestDate",
+          "type": "date"
+        },
+        {
+          "name": "Action",
+          "title": "Action",
+          "type": "string"
+        },
+        {
+          "name": "Platform",
+          "title": "Platform",
+          "type": "string"
+        },
+        {
+          "name": "ApprovalStatus",
+          "title": "ApprovalStatus",
+          "type": "boolean"
+        },
+        {
+          "maximum": 50000,
+          "minimum": 0,
+          "name": "index",
+          "title": "index",
+          "type": "integer"
+        },
+        {
+          "name": "MessageID",
+          "title": "MessageID",
+          "type": "string"
+        },
+        {
+          "name": "Observable_Value",
+          "title": "Observable_Value",
+          "type": "string"
+        },
+        {
+          "name": "Observable_Type",
+          "title": "Observable_Type",
+          "type": "string"
+        },
+        {
+          "name": "FulfillmentDate",
+          "title": "FulfillmentDate",
+          "type": "date"
+        },
+        {
+          "name": "Approver",
+          "title": "Approver",
+          "type": "string"
+        },
+        {
+          "name": "Platform_Action_ID",
+          "title": "Platform_Action_ID",
+          "type": "string"
+        }
+      ],
+      "base_type": "datatype",
+      "object_type": "tabletype"
+    }
+  },
+  "subworkflows": [
+    {
+      "workflow": {
+        "unique_name": "definition_workflow_020CUSNIPISBX54gKeIdAofdLLmomuDbJyV",
+        "name": "Duo MFA Request",
+        "title": "Duo MFA Request",
+        "type": "generic.workflow",
+        "base_type": "workflow",
+        "variables": [
+          {
+            "schema_id": "datatype.string",
+            "properties": {
+              "value": "",
+              "scope": "input",
+              "name": "Username",
+              "type": "datatype.string",
+              "is_required": true,
+              "is_invisible": false
+            },
+            "unique_name": "variable_workflow_020CVHY214BD51V5cYhuh4b7Tr9cee85dzI",
+            "object_type": "variable_workflow"
+          },
+          {
+            "schema_id": "datatype.string",
+            "properties": {
+              "value": "DIW84SZU2LDA9X8RYMDF",
+              "scope": "input",
+              "name": "Duo Admin Integration Key",
+              "type": "datatype.string",
+              "is_required": true,
+              "is_invisible": false
+            },
+            "unique_name": "variable_workflow_020CZZHSTGXUE0ib7fBOz6RL1boOxrhjzti",
+            "object_type": "variable_workflow"
+          },
+          {
+            "schema_id": "datatype.string",
+            "properties": {
+              "value": "",
+              "scope": "output",
+              "name": "Username_Out",
+              "type": "datatype.string",
+              "is_required": false,
+              "is_invisible": false
+            },
+            "unique_name": "variable_workflow_020D22NVCG1SZ3PEd6SFyXXwbSgUdJ4YWQT",
+            "object_type": "variable_workflow"
+          },
+          {
+            "schema_id": "datatype.secure_string",
+            "properties": {
+              "value": "*****",
+              "scope": "input",
+              "name": "Duo Admin Secret Key",
+              "type": "datatype.secure_string",
+              "is_required": true,
+              "is_invisible": false
+            },
+            "unique_name": "variable_workflow_020CZZZPD43VO4NuYDF6OZCRfF4OXtIq2ej",
+            "object_type": "variable_workflow"
+          },
+          {
+            "schema_id": "datatype.string",
+            "properties": {
+              "value": "DIG48T2YCLQAWZ890CNX",
+              "scope": "input",
+              "name": "API Auth Integration key",
+              "type": "datatype.string",
+              "description": "Integration Key from the Duo API Auth App\n",
+              "is_required": true,
+              "is_invisible": false
+            },
+            "unique_name": "variable_workflow_020CVBK5SN7KY1Y7ipxu1DracIBcbs8w5oZ",
+            "object_type": "variable_workflow"
+          },
+          {
+            "schema_id": "datatype.secure_string",
+            "properties": {
+              "value": "*****",
+              "scope": "input",
+              "name": "API Auth Secret Key",
+              "type": "datatype.secure_string",
+              "description": "API Auth Secret Key from the Duo API Auth App",
+              "is_required": true,
+              "is_invisible": false
+            },
+            "unique_name": "variable_workflow_020CVD0V7YUYV6fav7Vwy8xJawr9t48fZFQ",
+            "object_type": "variable_workflow"
+          },
+          {
+            "schema_id": "datatype.string",
+            "properties": {
+              "value": "",
+              "scope": "output",
+              "name": "DuoAuthResult",
+              "type": "datatype.string",
+              "is_required": false,
+              "is_invisible": false
+            },
+            "unique_name": "variable_workflow_020CY2A9JHV8B6K3etfhpNvwE4De8IgeJGg",
+            "object_type": "variable_workflow"
+          },
+          {
+            "schema_id": "datatype.string",
+            "properties": {
+              "value": "",
+              "scope": "output",
+              "name": "Status Message",
+              "type": "datatype.string",
+              "is_required": false,
+              "is_invisible": false
+            },
+            "unique_name": "variable_workflow_020CYRTXY8ROU47hBta737aS1VJ6lopJkMD",
+            "object_type": "variable_workflow"
+          },
+          {
+            "schema_id": "datatype.string",
+            "properties": {
+              "value": "api-2af31331.duosecurity.com",
+              "scope": "input",
+              "name": "API Hostname",
+              "type": "datatype.string",
+              "is_required": true,
+              "is_invisible": false
+            },
+            "unique_name": "variable_workflow_020CZV7A1UGOQ28KozjwTAm5mALTU7X3oEA",
+            "object_type": "variable_workflow"
+          },
+          {
+            "schema_id": "datatype.string",
+            "properties": {
+              "value": "",
+              "scope": "output",
+              "name": "AuthStatus",
+              "type": "datatype.string",
+              "description": "Returned Status of the Authentication event \n",
+              "is_required": false,
+              "is_invisible": false
+            },
+            "unique_name": "variable_workflow_020CX47GDV3282sMl4HdzXp4NaR07cz7D00",
+            "object_type": "variable_workflow"
+          }
+        ],
+        "properties": {
+          "atomic": {
+            "is_atomic": false
+          },
+          "delete_workflow_instance": false,
+          "display_name": "Duo MFA Request",
+          "runtime_user": {
+            "target_default": true
+          },
+          "target": {
+            "target_type": "web-service.endpoint",
+            "target_id": "definition_target_020CVXW3CSZT75JlboyGQvg4Skc9vAUVfWA",
+            "execute_on_workflow_target": true
+          }
+        },
+        "object_type": "definition_workflow",
+        "actions": [
+          {
+            "unique_name": "definition_activity_020CVKMZ5VBVY3o91MTXPCpxI9jlVhW1DII",
+            "name": "Duo - Admin - Get User",
+            "title": "Duo - Admin - Get User",
+            "type": "workflow.atomic_workflow",
+            "base_type": "subworkflow",
+            "properties": {
+              "continue_on_failure": true,
+              "display_name": "Duo - Admin - Get User",
+              "input": {
+                "variable_workflow_01PP784U1V8FT1Cdr6lEXfiHwwbn6bsDUKT": "$workflow.definition_workflow_020CUSNIPISBX54gKeIdAofdLLmomuDbJyV.input.variable_workflow_020CZZHSTGXUE0ib7fBOz6RL1boOxrhjzti$",
+                "variable_workflow_01PP784U1V9TF27PYoY723j3qbJl7QRQOjK": "$workflow.definition_workflow_020CUSNIPISBX54gKeIdAofdLLmomuDbJyV.input.variable_workflow_020CZZZPD43VO4NuYDF6OZCRfF4OXtIq2ej$",
+                "variable_workflow_01PP784U1VCAA7c2VqwZKgU3scR51thmTMM": "$workflow.definition_workflow_020CUSNIPISBX54gKeIdAofdLLmomuDbJyV.input.variable_workflow_020CZV7A1UGOQ28KozjwTAm5mALTU7X3oEA$",
+                "variable_workflow_01PP784U1VDEE2cwX8GdChEsHknyHsgt6nw": "$workflow.definition_workflow_020CUSNIPISBX54gKeIdAofdLLmomuDbJyV.input.variable_workflow_020CVHY214BD51V5cYhuh4b7Tr9cee85dzI$",
+                "variable_workflow_01PP784U1VKO54wsLOPdERFQVYlMNFplLH1": "",
+                "variable_workflow_01WGOVFD2R9IV3WHmt3FQv1oNBGz0UvRmxp": 100,
+                "variable_workflow_01WGOVHPQYSDL02afSLQrZUEozvSAsaesyt": 0
+              },
+              "runtime_user": {
+                "target_default": true
+              },
+              "skip_execution": false,
+              "target": {
+                "target_type": "web-service.endpoint",
+                "use_workflow_target": true
+              },
+              "workflow_id": "definition_workflow_01PP784U9VGRC6ISP15eyRIQPnhZsDlJlJU",
+              "workflow_name": "Duo - Admin - Get User"
+            },
+            "object_type": "definition_activity"
+          },
+          {
+            "unique_name": "definition_activity_020E3CK54HNXL6RpdC2vGT31ZWqWAzer8qV",
+            "name": "JSONPath Query",
+            "title": "Query_RealName",
+            "type": "corejava.jsonpathquery",
+            "base_type": "activity",
+            "properties": {
+              "action_timeout": 180,
+              "continue_on_failure": false,
+              "display_name": "Query_RealName",
+              "input_json": "$activity.definition_activity_020CVKMZ5VBVY3o91MTXPCpxI9jlVhW1DII.output.variable_workflow_01PP784U1V42C78L9NSUOOdYwsoTlGDzMOw$",
+              "jsonpath_queries": [
+                {
+                  "jsonpath_query": "$.response[0].realname",
+                  "jsonpath_query_name": "Full_name",
+                  "jsonpath_query_type": "string"
+                },
+                {
+                  "jsonpath_query": "$.response[0].username",
+                  "jsonpath_query_name": "username",
+                  "jsonpath_query_type": "string"
+                }
+              ],
+              "skip_execution": false
+            },
+            "object_type": "definition_activity"
+          },
+          {
+            "unique_name": "definition_activity_020CZ3R7A5OFK6WxzI1UqpEmrC72trY4ZqQ",
+            "name": "Condition Block",
+            "title": "User Exists?",
+            "type": "logic.if_else",
+            "base_type": "activity",
+            "properties": {
+              "continue_on_failure": false,
+              "display_name": "User Exists?",
+              "skip_execution": false
+            },
+            "object_type": "definition_activity",
+            "blocks": [
+              {
+                "unique_name": "definition_activity_020CZ3R7VDNEV7HzsOmeZp5mjbRw8IPlKcp",
+                "name": "Condition Branch",
+                "title": "NO",
+                "type": "logic.condition_block",
+                "base_type": "activity",
+                "properties": {
+                  "condition": {
+                    "left_operand": "$activity.definition_activity_020CVKMZ5VBVY3o91MTXPCpxI9jlVhW1DII.output.error.code$",
+                    "operator": "eq",
+                    "right_operand": "400"
+                  },
+                  "continue_on_failure": false,
+                  "display_name": "NO",
+                  "skip_execution": false
+                },
+                "object_type": "definition_activity",
+                "actions": [
+                  {
+                    "unique_name": "definition_activity_020CZ6GIS4TK340aJLUAoa8K1OdG3rxrqUu",
+                    "name": "Set Variables",
+                    "title": "Set Status Message",
+                    "type": "core.set_multiple_variables",
+                    "base_type": "activity",
+                    "properties": {
+                      "continue_on_failure": false,
+                      "display_name": "Set Status Message",
+                      "skip_execution": false,
+                      "variables_to_update": [
+                        {
+                          "variable_to_update": "$workflow.definition_workflow_020CUSNIPISBX54gKeIdAofdLLmomuDbJyV.output.variable_workflow_020CYRTXY8ROU47hBta737aS1VJ6lopJkMD$",
+                          "variable_value_new": "$activity.definition_activity_020CVKMZ5VBVY3o91MTXPCpxI9jlVhW1DII.output.error.message$"
+                        }
+                      ]
+                    },
+                    "object_type": "definition_activity"
+                  },
+                  {
+                    "unique_name": "definition_activity_020CZJRGNKIO03UPYvqI7AL3be5oiJZ8W6k",
+                    "name": "Completed",
+                    "title": "Completed",
+                    "type": "logic.completed",
+                    "base_type": "activity",
+                    "properties": {
+                      "completion_type": "failed-completed",
+                      "continue_on_failure": true,
+                      "display_name": "Completed",
+                      "result_message": "$activity.definition_activity_020CZ6GIS4TK340aJLUAoa8K1OdG3rxrqUu.output.error.message$",
+                      "skip_execution": false
+                    },
+                    "object_type": "definition_activity"
+                  }
+                ]
+              },
+              {
+                "unique_name": "definition_activity_020CZ6XXV3N2U5tDd5ElczeI57whmdvZEVa",
+                "name": "Condition Branch",
+                "title": "YES",
+                "type": "logic.condition_block",
+                "base_type": "activity",
+                "properties": {
+                  "condition": {
+                    "left_operand": "$activity.definition_activity_020CVKMZ5VBVY3o91MTXPCpxI9jlVhW1DII.output.error.code$",
+                    "operator": "ne",
+                    "right_operand": "400"
+                  },
+                  "continue_on_failure": false,
+                  "display_name": "YES",
+                  "skip_execution": false
+                },
+                "object_type": "definition_activity",
+                "actions": [
+                  {
+                    "unique_name": "definition_activity_020CW58PSKAOI0uchEbUxfOdpYRRG2nq95H",
+                    "name": "Duo - Auth - PreAuth",
+                    "title": "Duo - Auth - PreAuth",
+                    "type": "workflow.atomic_workflow",
+                    "base_type": "subworkflow",
+                    "properties": {
+                      "continue_on_failure": false,
+                      "display_name": "Duo - Auth - PreAuth",
+                      "input": {
+                        "variable_workflow_01PP743F3TLES63UoQXVoJeW6MlpVO4j82m": "$workflow.definition_workflow_020CUSNIPISBX54gKeIdAofdLLmomuDbJyV.input.variable_workflow_020CZV7A1UGOQ28KozjwTAm5mALTU7X3oEA$",
+                        "variable_workflow_01PP743F3TXJ02veeSgUAe4bt9vi30hBRgX": "$activity.definition_activity_020E3CK54HNXL6RpdC2vGT31ZWqWAzer8qV.output.jsonpath_queries.username$",
+                        "variable_workflow_01PP743F3TYOY01EQ9FhnHNhDh4V2K2h87D": "$workflow.definition_workflow_020CUSNIPISBX54gKeIdAofdLLmomuDbJyV.input.variable_workflow_020CVD0V7YUYV6fav7Vwy8xJawr9t48fZFQ$",
+                        "variable_workflow_01PP743F3TZTA6YAM7sYlJj94EkNO2G8PgM": "",
+                        "variable_workflow_01PP743F3U35O0xPBGTdX1mTWdpCh1BeSFq": "$workflow.definition_workflow_020CUSNIPISBX54gKeIdAofdLLmomuDbJyV.input.variable_workflow_020CVBK5SN7KY1Y7ipxu1DracIBcbs8w5oZ$",
+                        "variable_workflow_01PP743F3U4885xhV7t96Zun7A5eUuwDMHy": "",
+                        "variable_workflow_01PP743F3U59W2z9PlyPES3i9PW1IL3rEQr": ""
+                      },
+                      "runtime_user": {
+                        "target_default": true
+                      },
+                      "skip_execution": false,
+                      "target": {
+                        "target_type": "web-service.endpoint",
+                        "use_workflow_target": true
+                      },
+                      "workflow_id": "definition_workflow_01PP743FB802N16fZ4FY6iGFtMjn5ZAtRqi",
+                      "workflow_name": "Duo - Auth - PreAuth"
+                    },
+                    "object_type": "definition_activity"
+                  },
+                  {
+                    "unique_name": "definition_activity_020CYKJ697AV95NOHBHDB7q9DFT5tLi5wON",
+                    "name": "Condition Block",
+                    "title": "Is User Active?",
+                    "type": "logic.if_else",
+                    "base_type": "activity",
+                    "properties": {
+                      "continue_on_failure": false,
+                      "display_name": "Is User Active?",
+                      "skip_execution": false
+                    },
+                    "object_type": "definition_activity",
+                    "blocks": [
+                      {
+                        "unique_name": "definition_activity_020CYKJ6N4TFJ60zq8EJEDo6FFWmtjIcQDT",
+                        "name": "Condition Branch",
+                        "title": "Yes",
+                        "type": "logic.condition_block",
+                        "base_type": "activity",
+                        "properties": {
+                          "condition": {
+                            "left_operand": "$activity.definition_activity_020CW58PSKAOI0uchEbUxfOdpYRRG2nq95H.output.variable_workflow_01PP743F3TWF06eHKfauV3xWqc9jx7VDirQ$",
+                            "operator": "ne",
+                            "right_operand": "deny"
+                          },
+                          "continue_on_failure": false,
+                          "display_name": "Yes",
+                          "skip_execution": false
+                        },
+                        "object_type": "definition_activity",
+                        "actions": [
+                          {
+                            "unique_name": "definition_activity_020CW5BW6OT8S00XYZFZZx34fPaFDfpU89f",
+                            "name": "Duo - Auth - Authenticate",
+                            "title": "Duo - Auth - Authenticate",
+                            "type": "workflow.atomic_workflow",
+                            "base_type": "subworkflow",
+                            "properties": {
+                              "continue_on_failure": false,
+                              "display_name": "Duo - Auth - Authenticate",
+                              "input": {
+                                "variable_workflow_01PP77KVGO3FQ5WNkQ5yn0sXbrSvoXcqjJW": "push",
+                                "variable_workflow_01PP77KVGO4OI5FHzJQyoxle8PORa9L6JAe": "$activity.definition_activity_020E3CK54HNXL6RpdC2vGT31ZWqWAzer8qV.output.jsonpath_queries.username$",
+                                "variable_workflow_01PP77KVGO5UO6Zm1cr4WQ8LSwAibCY2Yku": "",
+                                "variable_workflow_01PP77KVGO8CE44AeS30DUjpyc9y7V3v4oz": "$activity.definition_activity_020E3CK54HNXL6RpdC2vGT31ZWqWAzer8qV.output.jsonpath_queries.username$",
+                                "variable_workflow_01PP77KVGO9I9364OLi2ZVLMdx6NtmvhBfU": "",
+                                "variable_workflow_01PP77KVGOANZ0yhUfl1udjpMIq2KHOyBCG": "",
+                                "variable_workflow_01PP77KVGOBWI68roygAEZ5K9v1I8ZDq7Y4": "",
+                                "variable_workflow_01PP77KVGOD6C6bozNC8dXBvoLRTIvYOzQY": "$workflow.definition_workflow_020CUSNIPISBX54gKeIdAofdLLmomuDbJyV.input.variable_workflow_020CZV7A1UGOQ28KozjwTAm5mALTU7X3oEA$",
+                                "variable_workflow_01PP77KVGOFHO3dKVA7IRGi9eDBN8aoiRNw": "$workflow.definition_workflow_020CUSNIPISBX54gKeIdAofdLLmomuDbJyV.input.variable_workflow_020CVD0V7YUYV6fav7Vwy8xJawr9t48fZFQ$",
+                                "variable_workflow_01PP77KVGOGK82plD9XeiosXxwUSYBEeYWJ": "$workflow.definition_workflow_020CUSNIPISBX54gKeIdAofdLLmomuDbJyV.input.variable_workflow_020CVBK5SN7KY1Y7ipxu1DracIBcbs8w5oZ$",
+                                "variable_workflow_01PP77KVGOHN45h5mE7Es0Q62LAx3XsgZKc": "auto"
+                              },
+                              "runtime_user": {
+                                "target_default": true
+                              },
+                              "skip_execution": false,
+                              "target": {
+                                "target_type": "web-service.endpoint",
+                                "use_workflow_target": true
+                              },
+                              "workflow_id": "definition_workflow_01PP77KVONOA00ainydSo8l8cWmAQYQPCnC",
+                              "workflow_name": "Duo - Auth - Authenticate"
+                            },
+                            "object_type": "definition_activity"
+                          },
+                          {
+                            "unique_name": "definition_activity_020CWVZ0LWKNW6RktCkkrPoutmr4zS2umZp",
+                            "name": "Duo - Auth - Authentication Status",
+                            "title": "Duo - Auth - Authentication Status",
+                            "type": "workflow.atomic_workflow",
+                            "base_type": "subworkflow",
+                            "properties": {
+                              "continue_on_failure": false,
+                              "display_name": "Duo - Auth - Authentication Status",
+                              "input": {
+                                "variable_workflow_01PP75QCKVNWV06pQ5jdFJUFjeLB6gCbekM": "$activity.definition_activity_020CW5BW6OT8S00XYZFZZx34fPaFDfpU89f.output.variable_workflow_01PP77KVGNXGZ3kIn2vO09TiVIPL9LYzSnC$",
+                                "variable_workflow_01PP75QCKVTRS1qKSgt47odV7aZ2M9exrIW": "$workflow.definition_workflow_020CUSNIPISBX54gKeIdAofdLLmomuDbJyV.input.variable_workflow_020CVBK5SN7KY1Y7ipxu1DracIBcbs8w5oZ$",
+                                "variable_workflow_01PP75QCKVVC30s4SCLJIBRsAzw7Sgggw2q": "$workflow.definition_workflow_020CUSNIPISBX54gKeIdAofdLLmomuDbJyV.input.variable_workflow_020CVD0V7YUYV6fav7Vwy8xJawr9t48fZFQ$",
+                                "variable_workflow_01PP75QCKW4WQ0xXmNipFCB2l7yTuSuy6EI": "$workflow.definition_workflow_020CUSNIPISBX54gKeIdAofdLLmomuDbJyV.input.variable_workflow_020CZV7A1UGOQ28KozjwTAm5mALTU7X3oEA$"
+                              },
+                              "runtime_user": {
+                                "target_default": true
+                              },
+                              "skip_execution": false,
+                              "target": {
+                                "target_type": "web-service.endpoint",
+                                "use_workflow_target": true
+                              },
+                              "workflow_id": "definition_workflow_01PP75QCRICV66ihCl281cdOeSj31vQwCkN",
+                              "workflow_name": "Duo - Auth - Authentication Status"
+                            },
+                            "object_type": "definition_activity"
+                          },
+                          {
+                            "unique_name": "definition_activity_020CX32X748ZK2ZUIxegaO24ejxA2RV2mDM",
+                            "name": "Set Variables",
+                            "title": "Prime Auth Status",
+                            "type": "core.set_multiple_variables",
+                            "base_type": "activity",
+                            "properties": {
+                              "continue_on_failure": false,
+                              "display_name": "Prime Auth Status",
+                              "skip_execution": false,
+                              "variables_to_update": [
+                                {
+                                  "variable_to_update": "$workflow.definition_workflow_020CUSNIPISBX54gKeIdAofdLLmomuDbJyV.output.variable_workflow_020CX47GDV3282sMl4HdzXp4NaR07cz7D00$",
+                                  "variable_value_new": "$activity.definition_activity_020CWVZ0LWKNW6RktCkkrPoutmr4zS2umZp.output.variable_workflow_01PP75QCKW09Z5DcGsY2ls5zBMTwBfwnsxo$"
+                                }
+                              ]
+                            },
+                            "object_type": "definition_activity"
+                          },
+                          {
+                            "unique_name": "definition_activity_020CX0ONLYTUK0tr4vuCEfDoxKTjoBUfV9V",
+                            "name": "While Loop",
+                            "title": "While Auth Status is Waiting DoLoop",
+                            "type": "logic.while",
+                            "base_type": "activity",
+                            "properties": {
+                              "continue_on_failure": false,
+                              "display_name": "While Auth Status is Waiting DoLoop",
+                              "skip_execution": false
+                            },
+                            "object_type": "definition_activity",
+                            "blocks": [
+                              {
+                                "unique_name": "definition_activity_020CX0ONWBJA41sZ8f70HxJGUSg7ZPfUgB4",
+                                "name": "Condition Branch",
+                                "title": "Condition Branch",
+                                "type": "logic.condition_block",
+                                "base_type": "activity",
+                                "properties": {
+                                  "condition": {
+                                    "left_operand": "$workflow.definition_workflow_020CUSNIPISBX54gKeIdAofdLLmomuDbJyV.output.variable_workflow_020CX47GDV3282sMl4HdzXp4NaR07cz7D00$",
+                                    "operator": "eq",
+                                    "right_operand": "waiting"
+                                  },
+                                  "continue_on_failure": false,
+                                  "display_name": "Condition Branch",
+                                  "skip_execution": false
+                                },
+                                "object_type": "definition_activity",
+                                "actions": [
+                                  {
+                                    "unique_name": "definition_activity_020CX4JE91EGR30BuLGfEfSH0WE1ayyCfbb",
+                                    "name": "Duo - Auth - Authentication Status",
+                                    "title": "Duo - Auth - Authentication Status",
+                                    "type": "workflow.atomic_workflow",
+                                    "base_type": "subworkflow",
+                                    "properties": {
+                                      "continue_on_failure": false,
+                                      "display_name": "Duo - Auth - Authentication Status",
+                                      "input": {
+                                        "variable_workflow_01PP75QCKVNWV06pQ5jdFJUFjeLB6gCbekM": "$activity.definition_activity_020CW5BW6OT8S00XYZFZZx34fPaFDfpU89f.output.variable_workflow_01PP77KVGNXGZ3kIn2vO09TiVIPL9LYzSnC$",
+                                        "variable_workflow_01PP75QCKVTRS1qKSgt47odV7aZ2M9exrIW": "$workflow.definition_workflow_020CUSNIPISBX54gKeIdAofdLLmomuDbJyV.input.variable_workflow_020CVBK5SN7KY1Y7ipxu1DracIBcbs8w5oZ$",
+                                        "variable_workflow_01PP75QCKVVC30s4SCLJIBRsAzw7Sgggw2q": "$workflow.definition_workflow_020CUSNIPISBX54gKeIdAofdLLmomuDbJyV.input.variable_workflow_020CVD0V7YUYV6fav7Vwy8xJawr9t48fZFQ$",
+                                        "variable_workflow_01PP75QCKW4WQ0xXmNipFCB2l7yTuSuy6EI": "$workflow.definition_workflow_020CUSNIPISBX54gKeIdAofdLLmomuDbJyV.input.variable_workflow_020CZV7A1UGOQ28KozjwTAm5mALTU7X3oEA$"
+                                      },
+                                      "runtime_user": {
+                                        "target_default": true
+                                      },
+                                      "skip_execution": false,
+                                      "target": {
+                                        "target_type": "web-service.endpoint",
+                                        "use_workflow_target": true
+                                      },
+                                      "workflow_id": "definition_workflow_01PP75QCRICV66ihCl281cdOeSj31vQwCkN",
+                                      "workflow_name": "Duo - Auth - Authentication Status"
+                                    },
+                                    "object_type": "definition_activity"
+                                  },
+                                  {
+                                    "unique_name": "definition_activity_020CX5E5P388N2Kehdg9lxMnSN5EB84NA1b",
+                                    "name": "Set Variables",
+                                    "title": "Set Auth Status",
+                                    "type": "core.set_multiple_variables",
+                                    "base_type": "activity",
+                                    "properties": {
+                                      "continue_on_failure": false,
+                                      "display_name": "Set Auth Status",
+                                      "skip_execution": false,
+                                      "variables_to_update": [
+                                        {
+                                          "variable_to_update": "$workflow.definition_workflow_020CUSNIPISBX54gKeIdAofdLLmomuDbJyV.output.variable_workflow_020CX47GDV3282sMl4HdzXp4NaR07cz7D00$",
+                                          "variable_value_new": "$activity.definition_activity_020CX4JE91EGR30BuLGfEfSH0WE1ayyCfbb.output.variable_workflow_01PP75QCKVYT51Ln1Or4JZhe64JFpEpnBe6$"
+                                        }
+                                      ]
+                                    },
+                                    "object_type": "definition_activity"
+                                  },
+                                  {
+                                    "unique_name": "definition_activity_020CY3OVNY47207gtkfsqaOMEgQoFdKJNA1",
+                                    "name": "Set Variables",
+                                    "title": "Set Auth Result",
+                                    "type": "core.set_multiple_variables",
+                                    "base_type": "activity",
+                                    "properties": {
+                                      "continue_on_failure": false,
+                                      "display_name": "Set Auth Result",
+                                      "skip_execution": false,
+                                      "variables_to_update": [
+                                        {
+                                          "variable_to_update": "$workflow.definition_workflow_020CUSNIPISBX54gKeIdAofdLLmomuDbJyV.output.variable_workflow_020CY2A9JHV8B6K3etfhpNvwE4De8IgeJGg$",
+                                          "variable_value_new": "$activity.definition_activity_020CX4JE91EGR30BuLGfEfSH0WE1ayyCfbb.output.variable_workflow_01PP75QCKW09Z5DcGsY2ls5zBMTwBfwnsxo$"
+                                        }
+                                      ]
+                                    },
+                                    "object_type": "definition_activity"
+                                  },
+                                  {
+                                    "unique_name": "definition_activity_020CZCC0IP0XO0j4ZDx35tkKIfVdoulani3",
+                                    "name": "Set Variables",
+                                    "title": "Set Status Message",
+                                    "type": "core.set_multiple_variables",
+                                    "base_type": "activity",
+                                    "properties": {
+                                      "continue_on_failure": false,
+                                      "display_name": "Set Status Message",
+                                      "skip_execution": false,
+                                      "variables_to_update": [
+                                        {
+                                          "variable_to_update": "$workflow.definition_workflow_020CUSNIPISBX54gKeIdAofdLLmomuDbJyV.output.variable_workflow_020CYRTXY8ROU47hBta737aS1VJ6lopJkMD$",
+                                          "variable_value_new": "$activity.definition_activity_020CX4JE91EGR30BuLGfEfSH0WE1ayyCfbb.output.variable_workflow_01PP75QCKW1SU2bMDRIDUG0xHxJa8z0LZWf$"
+                                        }
+                                      ]
+                                    },
+                                    "object_type": "definition_activity"
+                                  },
+                                  {
+                                    "unique_name": "definition_activity_020D23C7GV4D518mUJDxpjRhhEOpkfSttuX",
+                                    "name": "Set Variables",
+                                    "title": "Set  AuthN UserVar",
+                                    "type": "core.set_multiple_variables",
+                                    "base_type": "activity",
+                                    "properties": {
+                                      "continue_on_failure": false,
+                                      "display_name": "Set  AuthN UserVar",
+                                      "skip_execution": false,
+                                      "variables_to_update": [
+                                        {
+                                          "variable_to_update": "$workflow.definition_workflow_020CUSNIPISBX54gKeIdAofdLLmomuDbJyV.output.variable_workflow_020D22NVCG1SZ3PEd6SFyXXwbSgUdJ4YWQT$",
+                                          "variable_value_new": "$activity.definition_activity_020E3CK54HNXL6RpdC2vGT31ZWqWAzer8qV.output.jsonpath_queries.Full_name$"
+                                        }
+                                      ]
+                                    },
+                                    "object_type": "definition_activity"
+                                  }
+                                ]
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "unique_name": "definition_activity_020CYKJ6XOKUR0QK41sVoCovymb54eVUktt",
+                        "name": "Condition Branch",
+                        "title": "No",
+                        "type": "logic.condition_block",
+                        "base_type": "activity",
+                        "properties": {
+                          "condition": {
+                            "left_operand": "$activity.definition_activity_020CW58PSKAOI0uchEbUxfOdpYRRG2nq95H.output.variable_workflow_01PP743F3TWF06eHKfauV3xWqc9jx7VDirQ$",
+                            "operator": "eq",
+                            "right_operand": "deny"
+                          },
+                          "continue_on_failure": false,
+                          "display_name": "No",
+                          "skip_execution": false
+                        },
+                        "object_type": "definition_activity",
+                        "actions": [
+                          {
+                            "unique_name": "definition_activity_020CYS8JJ0NQV4wQ12k96mfYs57QmYA3Yof",
+                            "name": "Set Variables",
+                            "title": "Set Status Message",
+                            "type": "core.set_multiple_variables",
+                            "base_type": "activity",
+                            "properties": {
+                              "continue_on_failure": false,
+                              "display_name": "Set Status Message",
+                              "skip_execution": false,
+                              "variables_to_update": [
+                                {
+                                  "variable_to_update": "$workflow.definition_workflow_020CUSNIPISBX54gKeIdAofdLLmomuDbJyV.output.variable_workflow_020CYRTXY8ROU47hBta737aS1VJ6lopJkMD$",
+                                  "variable_value_new": "$activity.definition_activity_020CW58PSKAOI0uchEbUxfOdpYRRG2nq95H.output.variable_workflow_01PP743F3TQ961IlSagqtUw00sSBt2NbEGp$"
+                                }
+                              ]
+                            },
+                            "object_type": "definition_activity"
+                          },
+                          {
+                            "unique_name": "definition_activity_020CZIV748Y5B2mNF3VV47gdEkjtbRaPPVy",
+                            "name": "Completed",
+                            "title": "Completed",
+                            "type": "logic.completed",
+                            "base_type": "activity",
+                            "properties": {
+                              "completion_type": "failed-completed",
+                              "continue_on_failure": false,
+                              "display_name": "Completed",
+                              "result_message": "$activity.definition_activity_020CYS8JJ0NQV4wQ12k96mfYs57QmYA3Yof.output.error.message$",
+                              "skip_execution": false
+                            },
+                            "object_type": "definition_activity"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ],
+        "categories": [
+          "category_020CXHGRZYYMU5dxGhpZiqL5LbKSyHNYNrb"
+        ]
+      },
+      "dependent_workflows": [
+        "definition_workflow_01PP784U9VGRC6ISP15eyRIQPnhZsDlJlJU",
+        "definition_workflow_01PP743FB802N16fZ4FY6iGFtMjn5ZAtRqi",
+        "definition_workflow_01PP77KVONOA00ainydSo8l8cWmAQYQPCnC",
+        "definition_workflow_01PP75QCRICV66ihCl281cdOeSj31vQwCkN"
+      ]
+    }
+  ],
+  "atomic_workflows": [
+    "definition_workflow_01PP743FB802N16fZ4FY6iGFtMjn5ZAtRqi",
+    "definition_workflow_01PP784U9VGRC6ISP15eyRIQPnhZsDlJlJU",
+    "definition_workflow_020CSSJ5UWE1H4yt9Gj1pkYH9suvy2VbVyK",
+    "definition_workflow_01PR38PRIL1R04x7je59e5UtYqDQ0B1NHet",
+    "definition_workflow_020C4QO2G9VGJ5VBkpQfygvIMXWPP4AQ68Y",
+    "definition_workflow_01PP77KVONOA00ainydSo8l8cWmAQYQPCnC",
+    "definition_workflow_01PP75QCRICV66ihCl281cdOeSj31vQwCkN"
+  ],
+  "webhooks": {
+    "webhook_0206W1QB4ME0H5kv7o2yn14Xv1biSKeeprO": {
+      "name": "Webex-AdaptiveCard-Webhook",
+      "title": "Webex-AdaptiveCard-Webhook",
+      "type": "generic.webhook",
+      "base_type": "webhook",
+      "object_type": "webhook",
+      "version": "1.0.0",
+      "properties": {
+        "display_name": "Webex-AdaptiveCard-Webhook",
+        "request_content_type": "application/json; charset=utf-8"
+      },
+      "unique_name": "webhook_0206W1QB4ME0H5kv7o2yn14Xv1biSKeeprO"
+    }
+  },
+  "dependent_workflows": [
+    "definition_workflow_020CSSJ5UWE1H4yt9Gj1pkYH9suvy2VbVyK",
+    "definition_workflow_020C4QO2G9VGJ5VBkpQfygvIMXWPP4AQ68Y",
+    "definition_workflow_020CUSNIPISBX54gKeIdAofdLLmomuDbJyV",
+    "definition_workflow_01PR38PRIL1R04x7je59e5UtYqDQ0B1NHet"
+  ]
+}
